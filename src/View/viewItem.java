@@ -27,13 +27,14 @@ public class viewItem extends javax.swing.JInternalFrame {
      */
     public viewItem() {
         initComponents();
+        this.getRootPane().setDefaultButton(cancelbut);
         try {
             itemList = itemController.getAllItems();
             if (itemList.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No item were found");
             } else {
                 for (Item item : itemList) {
-                    Object rows[] = {item.getItemCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()};
+                    Object rows[] = {item.getItemCode(), item.getDescription(), item.getPurchasePrice(), item.getUnitPrice(), item.getQtyOnHand()};
                     ((DefaultTableModel) itemTable.getModel()).addRow(rows);
                 }
             }
@@ -69,11 +70,11 @@ public class viewItem extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Item Code", "Item Name", "Unit Price", "QTY"
+                "Item Code", "Item Name", "Purchase Price", "Unit Price", "QTY"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

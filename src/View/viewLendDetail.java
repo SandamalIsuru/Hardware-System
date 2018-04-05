@@ -30,7 +30,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
      */
     public viewLendDetail() {
         initComponents();
-
+        this.getRootPane().setDefaultButton(cancelbut);
         try {
             fillCustomerComboBox();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -57,7 +57,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
         addressText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         totalText = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        cancelbut = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -99,10 +99,10 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Total");
 
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cancelbut.setText("Close");
+        cancelbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cancelbutActionPerformed(evt);
             }
         });
 
@@ -130,7 +130,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
                                 .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(cancelbut, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -153,7 +153,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                     .addComponent(jLabel4)
                     .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
-                .addComponent(jButton1)
+                .addComponent(cancelbut)
                 .addContainerGap())
         );
 
@@ -202,12 +202,12 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_custNameComboActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
         int res = JOptionPane.showConfirmDialog(viewLendDetail.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
             viewLendDetail.this.dispose();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_cancelbutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,8 +256,8 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressText;
+    private javax.swing.JButton cancelbut;
     private javax.swing.JComboBox custNameCombo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

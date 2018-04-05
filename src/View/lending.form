@@ -283,7 +283,7 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="priceText" min="-2" pref="93" max="-2" attributes="0"/>
+                                  <Component id="unitPriceText" min="-2" pref="93" max="-2" attributes="0"/>
                                   <EmptySpace pref="44" max="32767" attributes="0"/>
                                   <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -319,7 +319,7 @@
                       <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="qtyText" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="priceText" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="unitPriceText" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -393,7 +393,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addbutActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="priceText">
+        <Component class="javax.swing.JTextField" name="unitPriceText">
         </Component>
         <Component class="javax.swing.JTextField" name="qtyText">
           <Events>

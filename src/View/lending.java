@@ -9,7 +9,6 @@ import Controller.customerController;
 import static Controller.customerController.getCustAddress;
 import static Controller.customerController.getCustID;
 import Controller.itemController;
-import static Controller.itemController.getItemCode;
 import static Controller.itemController.getQtyOnHand;
 import Controller.lendDetailController;
 import Model.Customer;
@@ -24,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static Controller.itemController.getItemDetailsByName;
 
 /**
  *
@@ -91,7 +91,7 @@ public class lending extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         itemCombo = new javax.swing.JComboBox();
         addbut = new javax.swing.JButton();
-        priceText = new javax.swing.JTextField();
+        unitPriceText = new javax.swing.JTextField();
         qtyText = new javax.swing.JTextField();
         itemCode = new javax.swing.JTextField();
         removebut = new javax.swing.JButton();
@@ -261,7 +261,7 @@ public class lending extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(priceText, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(unitPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
@@ -288,7 +288,7 @@ public class lending extends javax.swing.JInternalFrame {
                     .addComponent(jLabel10)
                     .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(priceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unitPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
                     .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
@@ -391,13 +391,13 @@ public class lending extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
-        if (itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
+        if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
 
             String description = (itemCombo.getSelectedItem()).toString();
             String Qtyonhand = itemCode.getText();
-            String unitPrice = priceText.getText();
+            String unitPrice = unitPriceText.getText();
             String qty = qtyText.getText();
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
@@ -418,7 +418,7 @@ public class lending extends javax.swing.JInternalFrame {
                     ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
                     //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
                     qtyText.setText("");
-                    priceText.setText("");
+                    unitPriceText.setText("");
                     discount.setValue(0);
                     totalText.setText(Double.toString(total));
                 }
@@ -451,6 +451,7 @@ public class lending extends javax.swing.JInternalFrame {
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
         try {
             itemCode.setText(fillItemCode(itemCombo));
+            unitPriceText.setText(fillUnitPriceBox(itemCombo));
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
@@ -567,7 +568,13 @@ public class lending extends javax.swing.JInternalFrame {
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
         String description = (combo.getSelectedItem()).toString();
-        String iCode = getItemCode(description);
+        String iCode = getItemDetailsByName(description).getString("item_code");
+        return iCode;
+    }
+    
+    private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
+        String description = (combo.getSelectedItem()).toString();
+        String iCode = getItemDetailsByName(description).getString("selling_price");
         return iCode;
     }
 
@@ -636,10 +643,10 @@ public class lending extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField priceText;
     private javax.swing.JTextField qtyText;
     private javax.swing.JButton removebut;
     private javax.swing.JButton savebut;
     private javax.swing.JTextField totalText;
+    private javax.swing.JTextField unitPriceText;
     // End of variables declaration//GEN-END:variables
 }

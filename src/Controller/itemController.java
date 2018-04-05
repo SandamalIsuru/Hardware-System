@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class itemController {
 
     public static int addItem(Item item) throws SQLException {
-        String query = "Insert into item values('" + item.getItemCode() + "','" + item.getDescription() + "','" + item.getUnitPrice() + "','" + item.getQtyOnHand() + "')";
+        String query = "Insert into item values('" + item.getItemCode() + "','" + item.getDescription() + "','" + item.getPurchasePrice() + "','" + item.getUnitPrice() + "','" + item.getQtyOnHand() + "')";
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 
@@ -27,7 +27,7 @@ public class itemController {
         ResultSet rst = DBconnect.DBconnect().createStatement().executeQuery(query);
         ArrayList<Item> items = new ArrayList<>();
         while (rst.next()) {
-            Item item = new Item(rst.getString("item_code"), rst.getString("descr"), rst.getDouble("price"), rst.getInt("qtyonhand"));
+            Item item = new Item(rst.getString("item_code"), rst.getString("descr"), rst.getDouble("purchasing_price"), rst.getDouble("selling_price"), rst.getInt("qtyonhand"));
             items.add(item);
         }
         return items;
@@ -42,11 +42,11 @@ public class itemController {
         return null;
     }
 
-    public static String getItemCode(String description) throws SQLException, ClassNotFoundException {
-        String query = "select item_code from item where descr='" + description + "'";
+    public static ResultSet getItemDetailsByName(String description) throws SQLException, ClassNotFoundException {
+        String query = "select item_code,selling_price from item where descr='" + description + "'";
         ResultSet rst = DBconnect.DBconnect().createStatement().executeQuery(query);
         if (rst.first()) {
-            return rst.getString("item_code");
+            return rst;
         }
         return null;
     }
@@ -61,7 +61,7 @@ public class itemController {
     }
 
     public static int updateItems(Item item) throws SQLException, ClassNotFoundException {
-        String query = "update item set descr='" + item.getDescription() + "', price='" + item.getUnitPrice() + "',qtyonhand='" + item.getQtyOnHand() + "' where item_code='" + item.getItemCode() + "'";
+        String query = "update item set descr='" + item.getDescription() + "', purchasing_price='" + item.getPurchasePrice() + "', selling_price='" + item.getUnitPrice() + "',qtyonhand='" + item.getQtyOnHand() + "' where item_code='" + item.getItemCode() + "'";
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 

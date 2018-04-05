@@ -25,7 +25,7 @@ public class viewCustomer extends javax.swing.JInternalFrame {
      */
     public viewCustomer() {
         initComponents();
-
+        this.getRootPane().setDefaultButton(cancelbut);
         try {
             ArrayList<Customer> customerList = customerController.getAllCustomers();
             if (customerList.isEmpty()) {

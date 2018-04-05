@@ -13,6 +13,7 @@ public class Item {
 
     private String itemCode;
     private String desc;
+    private double purchasePrice;
     private double unitPrice;
     private int qtyOnHand;
 
@@ -20,9 +21,10 @@ public class Item {
 
     }
 
-    public Item(String itemCode, String desc, double unitPrice, int qtyOnHand) {
+    public Item(String itemCode, String desc, double purchasePrice, double unitPrice, int qtyOnHand) {
         this.itemCode = itemCode;
         this.desc = desc;
+        this.purchasePrice = purchasePrice;
         this.unitPrice = unitPrice;
         this.qtyOnHand = qtyOnHand;
     }
@@ -54,7 +56,7 @@ public class Item {
     public void setDescription(String description) {
         this.desc = desc;
     }
-
+    
     /**
      * @return the unitPrice
      */
@@ -67,6 +69,20 @@ public class Item {
      */
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    /**
+     * @return the purchasePrice
+     */
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    /**
+     * @param purchasePrice the purchasePrice to set
+     */
+    public void setPurchasePrice(double purchasePrice) {
+        this.unitPrice = purchasePrice;
     }
 
     /**

@@ -6,7 +6,6 @@
 package View;
 
 import Controller.itemController;
-import static Controller.itemController.getItemCode;
 import static Controller.itemController.getQtyOnHand;
 import Model.Item;
 import java.sql.SQLException;
@@ -16,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static Controller.itemController.getItemDetailsByName;
 
 /**
  *
@@ -60,7 +60,7 @@ public class sellItem extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         itemCombo = new javax.swing.JComboBox();
         qtyText = new javax.swing.JTextField();
-        priceText = new javax.swing.JTextField();
+        unitPriceText = new javax.swing.JTextField();
         cancel = new javax.swing.JButton();
         addbut = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -86,7 +86,7 @@ public class sellItem extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -192,7 +192,7 @@ public class sellItem extends javax.swing.JInternalFrame {
                             .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(discount, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                                .addComponent(priceText, javax.swing.GroupLayout.Alignment.LEADING)))
+                                .addComponent(unitPriceText, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -236,7 +236,7 @@ public class sellItem extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(priceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(unitPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -270,13 +270,13 @@ public class sellItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
-        if (itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
+        if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(sellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
 
             String description = (itemCombo.getSelectedItem()).toString();
             String Qtyonhand = itemCode.getText();
-            String unitPrice = priceText.getText();
+            String unitPrice = unitPriceText.getText();
             String qty = qtyText.getText();
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
@@ -297,7 +297,7 @@ public class sellItem extends javax.swing.JInternalFrame {
                     ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
                     //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
                     qtyText.setText("");
-                    priceText.setText("");
+                    unitPriceText.setText("");
                     discount.setValue(0);
                     totalText.setText(Double.toString(total));
                 }
@@ -313,6 +313,7 @@ public class sellItem extends javax.swing.JInternalFrame {
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
         try {
             itemCode.setText(fillItemCode(itemCombo));
+            unitPriceText.setText(fillUnitPriceBox(itemCombo));
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -411,7 +412,13 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
         String description = (combo.getSelectedItem()).toString();
-        String iCode = getItemCode(description);
+        String iCode = getItemDetailsByName(description).getString("item_code");
+        return iCode;
+    }
+    
+    private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
+        String description = (combo.getSelectedItem()).toString();
+        String iCode = getItemDetailsByName(description).getString("selling_price");
         return iCode;
     }
 
@@ -438,9 +445,9 @@ public class sellItem extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton okbut;
-    private javax.swing.JTextField priceText;
     private javax.swing.JTextField qtyText;
     private javax.swing.JButton removebut;
     private javax.swing.JTextField totalText;
+    private javax.swing.JTextField unitPriceText;
     // End of variables declaration//GEN-END:variables
 }
