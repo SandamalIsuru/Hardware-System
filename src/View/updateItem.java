@@ -7,15 +7,11 @@ package View;
 
 import Controller.itemController;
 import Model.Item;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /**
  *
@@ -29,7 +25,7 @@ public class updateItem extends javax.swing.JInternalFrame {
      */
     public updateItem(){
         initComponents();
-        
+        this.getRootPane().setDefaultButton(updateButton);
         
         try {
             fillItemComboBox();

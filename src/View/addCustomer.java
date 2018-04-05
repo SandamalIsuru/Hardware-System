@@ -24,6 +24,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
      */
     public addCustomer() {
         initComponents();
+        this.getRootPane().setDefaultButton(addbut);
         try {
             idtext.setText(generateCustId());
         } catch (SQLException ex) {

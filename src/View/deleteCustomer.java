@@ -24,6 +24,7 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
      */
     public deleteCustomer() {
         initComponents();
+        this.getRootPane().setDefaultButton(deleteButton);
         
         try {
             fillCustomerComboBox();

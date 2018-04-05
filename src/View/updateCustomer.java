@@ -24,6 +24,7 @@ public class updateCustomer extends javax.swing.JInternalFrame {
      */
     public updateCustomer() {
         initComponents();
+        this.getRootPane().setDefaultButton(addbut);
         
         try {
             fillCustomerComboBox();

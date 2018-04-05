@@ -40,6 +40,7 @@ public class lending extends javax.swing.JInternalFrame {
      */
     public lending() {
         initComponents();
+        this.getRootPane().setDefaultButton(addbut);
         
         itemCode.setEditable(false);
         

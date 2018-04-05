@@ -24,6 +24,7 @@ public class deleteItem extends javax.swing.JInternalFrame {
      */
     public deleteItem() {
         initComponents();
+        this.getRootPane().setDefaultButton(deleteButton);
         
         try {
             fillItemComboBox();

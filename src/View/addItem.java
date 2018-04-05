@@ -24,6 +24,7 @@ public class addItem extends javax.swing.JInternalFrame {
      */
     public addItem() {
         initComponents();
+        this.getRootPane().setDefaultButton(addbut);
         try {
             itemCode.setText(generateItemCode());
         } catch (SQLException ex) {
