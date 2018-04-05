@@ -30,10 +30,10 @@ import javax.swing.table.DefaultTableModel;
  * @author Isuru SanDamal
  */
 public class lending extends javax.swing.JInternalFrame {
-    
+
     private SimpleDateFormat dateFormat;
     private Date date;
-    double total=0;
+    double total = 0;
 
     /**
      * Creates new form borrowing
@@ -41,50 +41,21 @@ public class lending extends javax.swing.JInternalFrame {
     public lending() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
-        
+
         itemCode.setEditable(false);
-        
+
         date = new Date();
         dateFormat = new SimpleDateFormat("E yyyy-MM-dd");
         dateText.setText(dateFormat.format(date));
-        
+
         try {
             fillCustomerComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
             fillItemComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
             custAddressText.setText(fillCustAddress(custNameCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
             custIDText.setText(fillCustID(custNameCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
             itemCode.setText(fillItemCode(itemCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -420,10 +391,9 @@ public class lending extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
-        if(itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()){
+        if (itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
+        } else {
 
             String description = (itemCombo.getSelectedItem()).toString();
             String Qtyonhand = itemCode.getText();
@@ -432,18 +402,18 @@ public class lending extends javax.swing.JInternalFrame {
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
             double qtty = Double.parseDouble(qty);
-            double ammount = ((up*qtty) - ((up*qtty)*(disc/100.0)));
+            double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
 
             String dbQty;
             try {
                 dbQty = getQOHtoCompare(Qtyonhand);
                 int dbQty1 = Integer.parseInt(dbQty);
 
-                if(dbQty1 < Integer.parseInt(qty)){
+                if (dbQty1 < Integer.parseInt(qty)) {
 
-                    JOptionPane.showMessageDialog(lending.this, "Stock Out....Remain "+dbQty+" Items", "Error", JOptionPane.ERROR_MESSAGE);
-                }else{
-                    total+=ammount;
+                    JOptionPane.showMessageDialog(lending.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    total += ammount;
                     Object[] rowData = {Qtyonhand, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
                     ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
                     //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
@@ -453,9 +423,8 @@ public class lending extends javax.swing.JInternalFrame {
                     totalText.setText(Double.toString(total));
                 }
 
-            } catch (SQLException ex) {
-                Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -464,19 +433,16 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void removebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebutActionPerformed
         int selectedRowCount = itemTable.getSelectedRowCount();
-
         if (selectedRowCount > 0) {
             int selectedRowIndex = itemTable.getSelectedRow();
             String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
-            total-=Double.parseDouble(val);
+            total -= Double.parseDouble(val);
 
             for (int i = 0; i < selectedRowCount; i++) {
                 int selectedRow = itemTable.getSelectedRow();
                 ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRow);
             }
-
             totalText.setText(Double.toString(total));
-
         } else {
             JOptionPane.showMessageDialog(lending.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
@@ -485,9 +451,8 @@ public class lending extends javax.swing.JInternalFrame {
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
         try {
             itemCode.setText(fillItemCode(itemCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_itemComboActionPerformed
@@ -499,23 +464,21 @@ public class lending extends javax.swing.JInternalFrame {
     private void addCustButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustButActionPerformed
         (lending.this.getDesktopPane()).add(new addCustomer());
         lending.this.toBack();
-        
+
     }//GEN-LAST:event_addCustButActionPerformed
 
     private void custNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custNameComboActionPerformed
         try {
             custAddressText.setText(fillCustAddress(custNameCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         try {
             custIDText.setText(fillCustID(custNameCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_custNameComboActionPerformed
@@ -529,36 +492,43 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void savebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savebutActionPerformed
         int rowCount = itemTable.getRowCount();
-        if (rowCount==0) {
+        if (rowCount == 0) {
             JOptionPane.showMessageDialog(lending.this, "Please Add Some Details", "Warnning", JOptionPane.WARNING_MESSAGE);
             qtyText.requestFocus();
         } else {
             String custId = custIDText.getText();
             String Date = dateText.getText().substring(4);
             for (int i = 0; i < rowCount; i++) {
-                    String itemId = (String) itemTable.getValueAt(i, 0);
-                    int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
-                    int disc = Integer.parseInt((String) itemTable.getValueAt(i, 4));
-                    int unitPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
-                    lendDetail lenddetail = new lendDetail(custId, itemId, Date, qty, disc, unitPrice);
+                String itemId = (String) itemTable.getValueAt(i, 0);
+                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
+                int disc = Integer.parseInt((String) itemTable.getValueAt(i, 4));
+                int unitPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
+                lendDetail lenddetail = new lendDetail(custId, itemId, Date, qty, disc, unitPrice);
+                try {
                     int res = lendDetailController.addLendDetail(lenddetail);
-                    
-                    String dbQty;
-                    try {
-                        dbQty = getQOHtoCompare(itemId);
-                        int dbQty1 = Integer.parseInt(dbQty);
-                        int res1 = itemController.updateItemQty(dbQty1, qty, itemId);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-            }
-            
-            for (int i = rowCount - 1; i >= 0; i--) {
-                    ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                totalText.setText("");
+
+                String dbQty;
+                try {
+                    dbQty = getQOHtoCompare(itemId);
+                    int dbQty1 = Integer.parseInt(dbQty);
+                    int res1 = itemController.updateItemQty(dbQty1, qty, itemId);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            totalText.setText("");
             JOptionPane.showMessageDialog(lending.this, "Added Successfully....");
         }
     }//GEN-LAST:event_savebutActionPerformed
@@ -566,8 +536,6 @@ public class lending extends javax.swing.JInternalFrame {
     /**
      * @param args the command line arguments
      */
-    
-    
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Customer> customers = customerController.getAllCustomers();
         custNameCombo.removeAllItems();
@@ -576,19 +544,19 @@ public class lending extends javax.swing.JInternalFrame {
         }
 
     }
-    
+
     private String fillCustAddress(JComboBox combo) throws SQLException, ClassNotFoundException {
         String address = (combo.getSelectedItem()).toString();
         String iCode = getCustAddress(address);
         return iCode;
     }
-    
+
     private String fillCustID(JComboBox combo) throws SQLException, ClassNotFoundException {
         String address = (combo.getSelectedItem()).toString();
         String iCode = getCustID(address);
         return iCode;
     }
-    
+
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> items = itemController.getAllItems();
         itemCombo.removeAllItems();
@@ -596,18 +564,18 @@ public class lending extends javax.swing.JInternalFrame {
             itemCombo.addItem(item.getDescription());
         }
     }
-    
+
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
         String description = (combo.getSelectedItem()).toString();
         String iCode = getItemCode(description);
         return iCode;
     }
-    
+
     private String getQOHtoCompare(String ic) throws SQLException, ClassNotFoundException {
         String Qty = getQtyOnHand(ic);
         return Qty;
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

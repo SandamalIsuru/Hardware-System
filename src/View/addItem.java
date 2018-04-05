@@ -27,12 +27,12 @@ public class addItem extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(addbut);
         try {
             itemCode.setText(generateItemCode());
-        } catch (SQLException ex) {
-            Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(addItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
+        itemDesc.requestFocus();
     }
 
     /**
@@ -186,9 +186,8 @@ public class addItem extends javax.swing.JInternalFrame {
                         itemDesc.requestFocus();
                     }
                 }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } catch (ClassNotFoundException | SQLException ex) {
+                JOptionPane.showMessageDialog(addItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(addItem.this, "Please insert correct value for Price & Qty...", "Error", JOptionPane.ERROR_MESSAGE);
@@ -197,7 +196,6 @@ public class addItem extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_addbutActionPerformed
 
-    
     private boolean isItemExist(Item item) throws ClassNotFoundException, SQLException {
         ArrayList<Item> allItems = itemController.getAllItems();
         for (Item oneItem : allItems) {
@@ -207,34 +205,33 @@ public class addItem extends javax.swing.JInternalFrame {
         }
         return false;
     }
-    
-    
+
     private String generateItemCode() throws SQLException, ClassNotFoundException {
-        try{
-        String itemCode = itemController.getLastItemCode();
-        
-        if (itemCode == null) {
-            return "I0001";
-        } else {
-            int num = Integer.parseInt(itemCode.split("I")[1]);
-            num++;
-            if (num < 10) {
-                return "I000" + num;
-            } else if (num < 100) {
-                return "I00" + num;
-            } else if (num < 1000) {
-                return "I0" + num;
+        try {
+            String itemCode = itemController.getLastItemCode();
+
+            if (itemCode == null) {
+                return "I0001";
             } else {
-                return "I" + num;
+                int num = Integer.parseInt(itemCode.split("I")[1]);
+                num++;
+                if (num < 10) {
+                    return "I000" + num;
+                } else if (num < 100) {
+                    return "I00" + num;
+                } else if (num < 1000) {
+                    return "I0" + num;
+                } else {
+                    return "I" + num;
+                }
             }
-        }
-        }catch(Exception e){
-            
+        } catch (Exception e) {
+
             JOptionPane.showMessageDialog(null, e);
             return "h";
         }
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;

@@ -18,24 +18,21 @@ import javax.swing.JOptionPane;
  * @author Isuru SanDamal
  */
 public class updateItem extends javax.swing.JInternalFrame {
-    
 
     /**
      * Creates new form updateItem
      */
-    public updateItem(){
+    public updateItem() {
         initComponents();
         this.getRootPane().setDefaultButton(updateButton);
-        
+
         try {
             fillItemComboBox();
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
-            
         }
-       
+
     }
 
     /**
@@ -167,7 +164,8 @@ public class updateItem extends javax.swing.JInternalFrame {
             descriptionText.setText(item.getDescription());
             priceText.setText(item.getUnitPrice() + "");
             qtyText.setText(item.getQtyOnHand() + "");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -179,7 +177,7 @@ public class updateItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-       try {
+        try {
             String itemCode = ((Item) itemCombo.getSelectedItem()).getItemCode();
             String description = descriptionText.getText();
             double unitPrice = Double.parseDouble(priceText.getText());
@@ -198,9 +196,8 @@ public class updateItem extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(updateItem.this, "Update failed...");
                 descriptionText.requestFocus();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_updateButtonActionPerformed
@@ -239,18 +236,16 @@ public class updateItem extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> itemList = itemController.getAllItems();
         itemCombo.removeAllItems();
         for (Item item : itemList) {
             itemCombo.addItem(item);
-            //itemCombo.setRenderer(new MyObjectListCellRenderer());
-            
         }
     }
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField descriptionText;

@@ -25,12 +25,11 @@ public class deleteItem extends javax.swing.JInternalFrame {
     public deleteItem() {
         initComponents();
         this.getRootPane().setDefaultButton(deleteButton);
-        
+
         try {
             fillItemComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -150,7 +149,8 @@ public class deleteItem extends javax.swing.JInternalFrame {
             Item item = (Item) itemCombo.getSelectedItem();
             priceText.setText(item.getUnitPrice() + "");
             qtyText.setText(item.getQtyOnHand() + "");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -166,9 +166,8 @@ public class deleteItem extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(deleteItem.this, "Delete failed...");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -215,7 +214,7 @@ public class deleteItem extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> itemList = itemController.getAllItems();
         itemCombo.removeAllItems();

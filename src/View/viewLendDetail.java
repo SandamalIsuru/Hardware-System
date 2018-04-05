@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Isuru SanDamal
  */
 public class viewLendDetail extends javax.swing.JInternalFrame {
-    
+
     int rowCount = 0;
 
     /**
@@ -30,13 +30,11 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
      */
     public viewLendDetail() {
         initComponents();
-        
-        
-         try {
+
+        try {
             fillCustomerComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(viewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -163,52 +161,43 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void custNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custNameComboActionPerformed
-        
-        if(custNameCombo.getSelectedItem()=="Select Customer"){
+
+        if (custNameCombo.getSelectedItem() == "Select Customer") {
             addressText.setText("");
             totalText.setText("");
             for (int i = rowCount - 1; i >= 0; i--) {
                 ((DefaultTableModel) table.getModel()).removeRow(i);
             }
             rowCount = 0;
-        }else{
-            
+        } else {
+
             try {
                 Customer customer = (Customer) custNameCombo.getSelectedItem();
                 addressText.setText(customer.getCustAddress());
-                
+
                 String custName = customer.getCustName();
-                
+
                 ArrayList<lendDetail> lenddetails;
-                try {
-                    lenddetails = lendDetailController.getAllBurrowDetail(custName);
-                    for (int i = rowCount - 1; i >= 0; i--) {
-                        ((DefaultTableModel) table.getModel()).removeRow(i);
-                    }
-                    for (lendDetail lenddetail : lenddetails) {
-                        Object[] rowData = {lenddetail.getItemName(), lenddetail.getDate(), lenddetail.getQTY(), lenddetail.getDiscount(), lenddetail.getUnitSellPrice(),((lenddetail.getUnitSellPrice()*lenddetail.getQTY()) - ((lenddetail.getUnitSellPrice()*lenddetail.getQTY())*(lenddetail.getDiscount()/100.0)))};
-                        ((DefaultTableModel) table.getModel()).addRow(rowData);
-                    }
-                    rowCount = table.getRowCount();
-                    
-                    double total = 0;
-                    for (int i = 0; i < rowCount; i++) {
-                        double amount = (Double) table.getValueAt(i, 5);
-                        total+=amount;
-                    
-                    }
-                    totalText.setText(Double.toString(total));
-                
-                
-                } catch (SQLException ex) {
-                    Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
+                lenddetails = lendDetailController.getAllBurrowDetail(custName);
+                for (int i = rowCount - 1; i >= 0; i--) {
+                    ((DefaultTableModel) table.getModel()).removeRow(i);
                 }
-        //custNameCombo.removeAllItems();
-                
-                
-            } catch (NullPointerException e) {
+                for (lendDetail lenddetail : lenddetails) {
+                    Object[] rowData = {lenddetail.getItemName(), lenddetail.getDate(), lenddetail.getQTY(), lenddetail.getDiscount(), lenddetail.getUnitSellPrice(), ((lenddetail.getUnitSellPrice() * lenddetail.getQTY()) - ((lenddetail.getUnitSellPrice() * lenddetail.getQTY()) * (lenddetail.getDiscount() / 100.0)))};
+                    ((DefaultTableModel) table.getModel()).addRow(rowData);
+                }
+                rowCount = table.getRowCount();
+
+                double total = 0;
+                for (int i = 0; i < rowCount; i++) {
+                    double amount = (Double) table.getValueAt(i, 5);
+                    total += amount;
+
+                }
+                totalText.setText(Double.toString(total));
+            } catch (SQLException | ClassNotFoundException | NullPointerException ex) {
+                JOptionPane.showMessageDialog(viewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_custNameComboActionPerformed
@@ -254,15 +243,13 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Customer> customers = customerController.getAllBurrowCustomers();
-        //custNameCombo.removeAllItems();
         for (Customer customer : customers) {
-            if(((DefaultComboBoxModel)custNameCombo.getModel()).getIndexOf(customer) == -1 ) {
-                custNameCombo.addItem(customer );
+            if (((DefaultComboBoxModel) custNameCombo.getModel()).getIndexOf(customer) == -1) {
+                custNameCombo.addItem(customer);
             }
-            //custNameCombo.addItem(customer);
         }
 
     }

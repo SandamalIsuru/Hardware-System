@@ -27,13 +27,12 @@ public class addCustomer extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(addbut);
         try {
             idtext.setText(generateCustId());
-        } catch (SQLException ex) {
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(addCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        nametext.requestFocus();
         this.setVisible(true);
+        nametext.requestFocus();
     }
 
     /**
@@ -57,7 +56,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         addbut = new javax.swing.JButton();
         cancelbut = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Add Customer");
@@ -73,6 +72,8 @@ public class addCustomer extends javax.swing.JInternalFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Telephone");
+
+        idtext.setEditable(false);
 
         addbut.setText("Add");
         addbut.addActionListener(new java.awt.event.ActionListener() {
@@ -165,12 +166,12 @@ public class addCustomer extends javax.swing.JInternalFrame {
             String address = addresstext.getText();
             String contact = teltext.getText();
             Customer customer = new Customer(custId, name, address, contact);
-            
+
             try {
                 if (isCustomerExist(customer)) {
                     JOptionPane.showMessageDialog(addCustomer.this, "Customer already exist...");
                     nametext.requestFocus();
-                } else{
+                } else {
                     int res = customerController.addCustomer(customer);
                     if (res > 0) {
                         JOptionPane.showMessageDialog(addCustomer.this, "Added Successfully....");
@@ -179,15 +180,14 @@ public class addCustomer extends javax.swing.JInternalFrame {
                         addresstext.setText("");
                         teltext.setText("");
                         nametext.requestFocus();
-                        
+
                     } else {
                         JOptionPane.showMessageDialog(addCustomer.this, "Added Fail......", "", JOptionPane.ERROR_MESSAGE);
-                        nametext.requestFocus(); 
+                        nametext.requestFocus();
                     }
                 }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } catch (ClassNotFoundException | SQLException ex) {
+                JOptionPane.showMessageDialog(addCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -203,8 +203,6 @@ public class addCustomer extends javax.swing.JInternalFrame {
     /**
      * @param args the command line arguments
      */
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;
@@ -229,7 +227,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
         }
         return false;
     }
-    
+
     private String generateCustId() throws SQLException, ClassNotFoundException {
         String custId = customerController.getLastCustId();
 

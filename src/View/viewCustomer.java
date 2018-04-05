@@ -25,21 +25,20 @@ public class viewCustomer extends javax.swing.JInternalFrame {
      */
     public viewCustomer() {
         initComponents();
-        
+
         try {
             ArrayList<Customer> customerList = customerController.getAllCustomers();
-            if (customerList.isEmpty()){
-                
+            if (customerList.isEmpty()) {
+
                 JOptionPane.showMessageDialog(null, "No item were found");
-            }else{
+            } else {
                 for (Customer customer : customerList) {
                     Object rows[] = {customer.getCustID(), customer.getCustName(), customer.getCustAddress(), customer.getCustTel()};
                     ((DefaultTableModel) customerTable.getModel()).addRow(rows);
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(viewCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(viewCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(viewCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);

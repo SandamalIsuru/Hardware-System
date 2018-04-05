@@ -10,23 +10,23 @@ package Model;
  * @author Isuru SanDamal
  */
 public class Item {
+
     private String itemCode;
     private String desc;
     private double unitPrice;
     private int qtyOnHand;
-    
-    public Item(){
-        
+
+    public Item() {
+
     }
-    
-    public Item(String itemCode, String desc, double unitPrice, int qtyOnHand){
+
+    public Item(String itemCode, String desc, double unitPrice, int qtyOnHand) {
         this.itemCode = itemCode;
         this.desc = desc;
         this.unitPrice = unitPrice;
         this.qtyOnHand = qtyOnHand;
     }
-    
-    
+
     /**
      * @return the itemCode
      */
@@ -40,7 +40,7 @@ public class Item {
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
     }
-    
+
     /**
      * @return the description
      */
@@ -54,7 +54,7 @@ public class Item {
     public void setDescription(String description) {
         this.desc = desc;
     }
-    
+
     /**
      * @return the unitPrice
      */
@@ -68,7 +68,7 @@ public class Item {
     public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
-    
+
     /**
      * @return the qtyOnHand
      */
@@ -82,7 +82,7 @@ public class Item {
     public void setQtyOnHand(int qtyOnHand) {
         this.qtyOnHand = qtyOnHand;
     }
-    
+
     @Override
     public String toString() {
         return itemCode + " - " + desc;

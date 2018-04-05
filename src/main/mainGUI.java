@@ -5,8 +5,6 @@
  */
 package main;
 
-
-import static Controller.itemController.deleteItem;
 import View.addCustomer;
 import View.addItem;
 import View.deleteCustomer;
@@ -20,7 +18,6 @@ import View.viewItem;
 import View.viewLendDetail;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
@@ -29,7 +26,6 @@ import javax.swing.JOptionPane;
  * @author Isuru SanDamal
  */
 public class mainGUI extends javax.swing.JFrame {
-    
 
     /**
      * Creates new form mainGUI
@@ -287,13 +283,13 @@ public class mainGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lendItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lendItemActionPerformed
-        
+
         mainDesktopPane.removeAll();
         lending l = new lending();
         mainDesktopPane.add(l);
         centerJIF(l);
         mainDesktopPane.repaint();
-        
+
     }//GEN-LAST:event_lendItemActionPerformed
 
     private void sellItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellItemActionPerformed
@@ -471,12 +467,12 @@ public class mainGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void centerJIF(JInternalFrame jif) {
-    Dimension desktopSize = mainDesktopPane.getSize();
-    Dimension jInternalFrameSize = jif.getSize();
-    int width = (desktopSize.width - jInternalFrameSize.width) / 2;
-    int height = (desktopSize.height - jInternalFrameSize.height) / 2;
-    jif.setLocation(width, height);
-    jif.setVisible(true);
-}
-    
+        Dimension desktopSize = mainDesktopPane.getSize();
+        Dimension jInternalFrameSize = jif.getSize();
+        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+        jif.setLocation(width, height);
+        jif.setVisible(true);
+    }
+
 }

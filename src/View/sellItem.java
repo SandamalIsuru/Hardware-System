@@ -22,30 +22,22 @@ import javax.swing.table.DefaultTableModel;
  * @author Isuru SanDamal
  */
 public class sellItem extends javax.swing.JInternalFrame {
-    
-    double total=0;
+
+    double total = 0;
 
     /**
      * Creates new form sellItem
      */
     public sellItem() {
         initComponents();
-        
+
         itemCode.setEditable(false);
-        
+
         try {
             fillItemComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
             itemCode.setText(fillItemCode(itemCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -270,7 +262,7 @@ public class sellItem extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        
+
         int res = JOptionPane.showConfirmDialog(sellItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
             sellItem.this.dispose();
@@ -278,11 +270,10 @@ public class sellItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
-        if(itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()){
+        if (itemCode.getText().isEmpty() || priceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(sellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
-            
+        } else {
+
             String description = (itemCombo.getSelectedItem()).toString();
             String Qtyonhand = itemCode.getText();
             String unitPrice = priceText.getText();
@@ -290,18 +281,18 @@ public class sellItem extends javax.swing.JInternalFrame {
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
             double qtty = Double.parseDouble(qty);
-            double ammount = ((up*qtty) - ((up*qtty)*(disc/100.0)));
+            double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
 
             String dbQty;
             try {
                 dbQty = getQOHtoCompare(Qtyonhand);
                 int dbQty1 = Integer.parseInt(dbQty);
 
-                if(dbQty1 < Integer.parseInt(qty)){
+                if (dbQty1 < Integer.parseInt(qty)) {
 
-                    JOptionPane.showMessageDialog(sellItem.this, "Stock Out....Remain "+dbQty+" Items", "Error", JOptionPane.ERROR_MESSAGE);
-                }else{
-                    total+=ammount;
+                    JOptionPane.showMessageDialog(sellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    total += ammount;
                     Object[] rowData = {Qtyonhand, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
                     ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
                     //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
@@ -311,21 +302,19 @@ public class sellItem extends javax.swing.JInternalFrame {
                     totalText.setText(Double.toString(total));
                 }
 
-            } catch (SQLException ex) {
-                Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }//GEN-LAST:event_addbutActionPerformed
 
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
         try {
             itemCode.setText(fillItemCode(itemCombo));
-        } catch (SQLException ex) {
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_itemComboActionPerformed
@@ -336,20 +325,17 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private void removebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebutActionPerformed
         int selectedRowCount = itemTable.getSelectedRowCount();
-        
-        
+
         if (selectedRowCount > 0) {
             int selectedRowIndex = itemTable.getSelectedRow();
             String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
-            total-=Double.parseDouble(val);
-            
+            total -= Double.parseDouble(val);
+
             for (int i = 0; i < selectedRowCount; i++) {
                 int selectedRow = itemTable.getSelectedRow();
                 ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRow);
             }
-            
             totalText.setText(Double.toString(total));
-
         } else {
             JOptionPane.showMessageDialog(sellItem.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
@@ -357,33 +343,27 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private void okbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okbutActionPerformed
         int rowCount = itemTable.getRowCount();
-            if (rowCount > 0) {
-             
-                for (int i = 0; i < rowCount; i++) {
-                    String itemCode = (String) itemTable.getValueAt(i, 0);
-                    int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
-                    String dbQty;
-                    try {
-                        dbQty = getQOHtoCompare(itemCode);
-                        int dbQty1 = Integer.parseInt(dbQty);
-                        int res = itemController.updateItemQty(dbQty1, qty, itemCode);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
+        if (rowCount > 0) {
 
-                    
+            for (int i = 0; i < rowCount; i++) {
+                String itemCode = (String) itemTable.getValueAt(i, 0);
+                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
+                String dbQty;
+                try {
+                    dbQty = getQOHtoCompare(itemCode);
+                    int dbQty1 = Integer.parseInt(dbQty);
+                    int res = itemController.updateItemQty(dbQty1, qty, itemCode);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                for (int i = rowCount - 1; i >= 0; i--) {
-                    ((DefaultTableModel) itemTable.getModel()).removeRow(i);
-                }
-                totalText.setText("");
-                JOptionPane.showMessageDialog(sellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
             }
-            
-        
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            totalText.setText("");
+            JOptionPane.showMessageDialog(sellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
+        }
     }//GEN-LAST:event_okbutActionPerformed
 
     /**
@@ -420,7 +400,7 @@ public class sellItem extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> items = itemController.getAllItems();
         itemCombo.removeAllItems();
@@ -428,13 +408,13 @@ public class sellItem extends javax.swing.JInternalFrame {
             itemCombo.addItem(item.getDescription());
         }
     }
-    
+
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
         String description = (combo.getSelectedItem()).toString();
         String iCode = getItemCode(description);
         return iCode;
     }
-    
+
     private String getQOHtoCompare(String ic) throws SQLException, ClassNotFoundException {
         String Qty = getQtyOnHand(ic);
         return Qty;

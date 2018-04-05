@@ -25,12 +25,11 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
     public deleteCustomer() {
         initComponents();
         this.getRootPane().setDefaultButton(deleteButton);
-        
+
         try {
             fillCustomerComboBox();
-        } catch (SQLException ex) {
-            Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -163,9 +162,8 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(deleteCustomer.this, "Delete failed...");
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
@@ -175,7 +173,8 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
             Customer customer = (Customer) customerCombo.getSelectedItem();
             addressText.setText(customer.getCustAddress());
             contactText.setText(customer.getCustTel());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_customerComboActionPerformed
 
@@ -213,7 +212,7 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Customer> customerList = customerController.getAllCustomers();
         customerCombo.removeAllItems();

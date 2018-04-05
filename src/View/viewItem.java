@@ -21,31 +21,29 @@ import javax.swing.table.DefaultTableModel;
 public class viewItem extends javax.swing.JInternalFrame {
 
     ArrayList<Item> itemList = null;
+
     /**
      * Creates new form viewItem
      */
     public viewItem() {
-        initComponents();        
+        initComponents();
         try {
             itemList = itemController.getAllItems();
-            if (itemList.isEmpty()){
-                
+            if (itemList.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No item were found");
-            }
-            else{
+            } else {
                 for (Item item : itemList) {
                     Object rows[] = {item.getItemCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()};
                     ((DefaultTableModel) itemTable.getModel()).addRow(rows);
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(viewItem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(viewItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(viewItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,7 +187,7 @@ public class viewItem extends javax.swing.JInternalFrame {
                 new viewItem().setVisible(true);
             }
         });
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
