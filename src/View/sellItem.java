@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import static Controller.itemController.getItemDetailsByName;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.WindowConstants;
+import java.util.List;
 
 /**
  *
@@ -56,6 +56,7 @@ public class sellItem extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -75,6 +76,8 @@ public class sellItem extends javax.swing.JInternalFrame {
         okbut = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         totalText = new javax.swing.JTextField();
+        autocompleteJComboBox1 = new TestFolder.AutocompleteJComboBox();
+        itemCombo1 = new javax.swing.JComboBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -120,6 +123,7 @@ public class sellItem extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Unit Price");
 
+        itemCombo.setEditable(true);
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
@@ -184,6 +188,20 @@ public class sellItem extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Total");
 
+        autocompleteJComboBox1.setRequestFocusEnabled(true);
+        autocompleteJComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autocompleteJComboBox1ActionPerformed(evt);
+            }
+        });
+
+        itemCombo1.setEditable(true);
+        itemCombo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemCombo1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,12 +220,13 @@ public class sellItem extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(itemCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(itemCombo, 0, 233, Short.MAX_VALUE)
                             .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(discount, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                                .addComponent(unitPriceText, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addComponent(discount, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                            .addComponent(unitPriceText)
+                            .addComponent(autocompleteJComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(itemCombo1, 0, 233, Short.MAX_VALUE))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -256,17 +275,24 @@ public class sellItem extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addbut)
-                    .addComponent(removebut))
-                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addbut)
+                            .addComponent(removebut)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(autocompleteJComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(itemCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel)
                     .addComponent(okbut))
@@ -385,21 +411,29 @@ public class sellItem extends javax.swing.JInternalFrame {
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         System.out.println("Key pressed");
         addKeyListener(new KeyAdapter() {
-               public void keyPressed(KeyEvent ke) {  // handler
-        if(ke.getKeyCode() == ke.VK_ESCAPE) {
-                       System.out.println("escaped ?");
-                       //setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // trying to close
-                       setVisible(false);
-                    } else {
-                       System.out.println("not escaped");
-                     }
-              } 
-           });
+            public void keyPressed(KeyEvent ke) {  // handler
+                if (ke.getKeyCode() == ke.VK_ESCAPE) {
+                    System.out.println("escaped ?");
+                    //setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // trying to close
+                    setVisible(false);
+                } else {
+                    System.out.println("not escaped");
+                }
+            }
+        });
     }//GEN-LAST:event_formKeyPressed
 
     private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
         System.out.println("Key pressed");
     }//GEN-LAST:event_formKeyTyped
+
+    private void autocompleteJComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autocompleteJComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_autocompleteJComboBox1ActionPerformed
+
+    private void itemCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCombo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemCombo1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,20 +472,24 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> items = itemController.getAllItems();
+        List<String> list = new ArrayList<String>();
         itemCombo.removeAllItems();
         for (Item item : items) {
-            itemCombo.addItem(item.getDescription());
+            itemCombo.addItem(item.toString());
         }
+        autoCompletion1.enable(itemCombo);
     }
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String description = (combo.getSelectedItem()).toString();
+        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
         String iCode = getItemDetailsByName(description).getString("item_code");
         return iCode;
     }
-    
+
     private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String description = (combo.getSelectedItem()).toString();
+        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
         String iCode = getItemDetailsByName(description).getString("selling_price");
         return iCode;
     }
@@ -463,10 +501,13 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;
+    private Common.AutoCompletion autoCompletion1;
+    private TestFolder.AutocompleteJComboBox autocompleteJComboBox1;
     private javax.swing.JButton cancel;
     private javax.swing.JSpinner discount;
     private javax.swing.JTextField itemCode;
     private javax.swing.JComboBox itemCombo;
+    private javax.swing.JComboBox itemCombo1;
     private javax.swing.JTable itemTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

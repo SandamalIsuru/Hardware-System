@@ -71,6 +71,8 @@ public class lending extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        autoCompletion1 = new Common.AutoCompletion();
+        autoCompletion2 = new Common.AutoCompletion();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         dateText = new javax.swing.JTextField();
@@ -145,6 +147,7 @@ public class lending extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Address");
 
+        custNameCombo.setEditable(true);
         custNameCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 custNameComboActionPerformed(evt);
@@ -214,6 +217,7 @@ public class lending extends javax.swing.JInternalFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Quantity");
 
+        itemCombo.setEditable(true);
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
@@ -474,14 +478,9 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void custNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custNameComboActionPerformed
         try {
-            fillCustomerComboBox();
+//            custNameCombo.removeAllItems();
+//            fillCustomerComboBox();
             custAddressText.setText(fillCustAddress(custNameCombo));
-        } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
             custIDText.setText(fillCustID(custNameCombo));
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
@@ -548,7 +547,7 @@ public class lending extends javax.swing.JInternalFrame {
         for (Customer customer : customers) {
             custNameCombo.addItem(customer.getCustName());
         }
-
+        autoCompletion1.enable(custNameCombo);
     }
 
     private String fillCustAddress(JComboBox combo) throws SQLException, ClassNotFoundException {
@@ -569,6 +568,7 @@ public class lending extends javax.swing.JInternalFrame {
         for (Item item : items) {
             itemCombo.addItem(item.toString());
         }
+        autoCompletion1.enable(itemCombo);
     }
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
@@ -625,6 +625,8 @@ public class lending extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCustBut;
     private javax.swing.JButton addbut;
+    private Common.AutoCompletion autoCompletion1;
+    private Common.AutoCompletion autoCompletion2;
     private javax.swing.JButton cancelbut;
     private javax.swing.JTextField custAddressText;
     private javax.swing.JTextField custIDText;
