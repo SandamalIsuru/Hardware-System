@@ -58,7 +58,11 @@ public class viewCustomer extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         cancelbut = new javax.swing.JButton();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         customerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

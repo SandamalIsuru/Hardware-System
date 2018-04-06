@@ -55,7 +55,11 @@ public class updateCustomer extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         custNameCombo = new javax.swing.JComboBox();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

@@ -16,6 +16,9 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static Controller.itemController.getItemDetailsByName;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -86,7 +89,19 @@ public class sellItem extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -366,6 +381,25 @@ public class sellItem extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(sellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
         }
     }//GEN-LAST:event_okbutActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        System.out.println("Key pressed");
+        addKeyListener(new KeyAdapter() {
+               public void keyPressed(KeyEvent ke) {  // handler
+        if(ke.getKeyCode() == ke.VK_ESCAPE) {
+                       System.out.println("escaped ?");
+                       //setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // trying to close
+                       setVisible(false);
+                    } else {
+                       System.out.println("not escaped");
+                     }
+              } 
+           });
+    }//GEN-LAST:event_formKeyPressed
+
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+        System.out.println("Key pressed");
+    }//GEN-LAST:event_formKeyTyped
 
     /**
      * @param args the command line arguments

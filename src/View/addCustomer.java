@@ -56,7 +56,11 @@ public class addCustomer extends javax.swing.JInternalFrame {
         addbut = new javax.swing.JButton();
         cancelbut = new javax.swing.JButton();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Add Customer");

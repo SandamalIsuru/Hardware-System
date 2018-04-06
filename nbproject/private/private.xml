@@ -3,22 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/deleteCustomer.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/updateItem.java</file>
+            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/Model/Item.java</file>
             <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/Controller/itemController.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/updateCustomer.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/main/mainGUI.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/Controller/lendDetailController.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/addItem.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/sellItem.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/viewLendDetail.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/Controller/customerController.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/Model/Customer.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/addCustomer.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/viewItem.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/deleteItem.java</file>
+            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/main/Test.java</file>
             <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/lending.java</file>
-            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/viewCustomer.java</file>
+            <file>file:/D:/My%20Stuff/My%20Works/Works/Hardware/Hardware-System/src/View/sellItem.java</file>
         </group>
     </open-files>
 </project-private>

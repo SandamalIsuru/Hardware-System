@@ -115,7 +115,11 @@ public class lending extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -470,6 +474,7 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void custNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custNameComboActionPerformed
         try {
+            fillCustomerComboBox();
             custAddressText.setText(fillCustAddress(custNameCombo));
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
@@ -562,18 +567,20 @@ public class lending extends javax.swing.JInternalFrame {
         ArrayList<Item> items = itemController.getAllItems();
         itemCombo.removeAllItems();
         for (Item item : items) {
-            itemCombo.addItem(item.getDescription());
+            itemCombo.addItem(item.toString());
         }
     }
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String description = (combo.getSelectedItem()).toString();
+        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-")+2);
         String iCode = getItemDetailsByName(description).getString("item_code");
         return iCode;
     }
     
     private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String description = (combo.getSelectedItem()).toString();
+        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-")+2);
         String iCode = getItemDetailsByName(description).getString("selling_price");
         return iCode;
     }

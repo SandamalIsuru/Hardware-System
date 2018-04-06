@@ -293,6 +293,7 @@ public class mainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_lendItemActionPerformed
 
     private void sellItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellItemActionPerformed
+
         mainDesktopPane.removeAll();
         sellItem si = new sellItem();
         mainDesktopPane.add(si);
