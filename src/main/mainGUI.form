@@ -159,7 +159,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="mainDesktopPane" max="32767" attributes="0"/>
           </Group>
-          <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jLabel1" alignment="0" pref="511" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">

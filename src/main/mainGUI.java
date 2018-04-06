@@ -18,6 +18,7 @@ import View.viewItem;
 import View.viewLendDetail;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
@@ -254,7 +255,7 @@ public class mainGUI extends javax.swing.JFrame {
                     .addComponent(viewlendItemBut1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mainDesktopPane))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -433,7 +434,10 @@ public class mainGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainGUI().setVisible(true);
+                JFrame mainFrame = new mainGUI();
+                mainFrame.setVisible(true);
+                mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                mainFrame.setUndecorated(true);
             }
         });
     }
