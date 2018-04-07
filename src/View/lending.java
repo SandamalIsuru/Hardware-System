@@ -5,6 +5,7 @@
  */
 package View;
 
+import Common.CommonUtil;
 import Controller.customerController;
 import static Controller.customerController.getCustAddress;
 import static Controller.customerController.getCustID;
@@ -24,6 +25,9 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static Controller.itemController.getItemDetailsByName;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -31,9 +35,12 @@ import static Controller.itemController.getItemDetailsByName;
  */
 public class lending extends javax.swing.JInternalFrame {
 
+    int rowCount = 0;
+    double total = 0;
     private SimpleDateFormat dateFormat;
     private Date date;
-    double total = 0;
+    Map<String, Integer> itemQtyList = new HashMap<String, Integer>(); //To keep QTY of all items
+    CommonUtil commonUtil = null;
 
     /**
      * Creates new form borrowing
@@ -41,7 +48,7 @@ public class lending extends javax.swing.JInternalFrame {
     public lending() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
-
+        commonUtil = new CommonUtil();
         itemCode.setEditable(false);
 
         date = new Date();
@@ -51,6 +58,8 @@ public class lending extends javax.swing.JInternalFrame {
         try {
             fillCustomerComboBox();
             fillItemComboBox();
+            autoCompletion1.enable(custNameCombo);
+            autoCompletion1.enable(itemCombo);
             custAddressText.setText(fillCustAddress(custNameCombo));
             custIDText.setText(fillCustID(custNameCombo));
             itemCode.setText(fillItemCode(itemCombo));
@@ -148,6 +157,7 @@ public class lending extends javax.swing.JInternalFrame {
         jLabel4.setText("Address");
 
         custNameCombo.setEditable(true);
+        custNameCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Customer" }));
         custNameCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 custNameComboActionPerformed(evt);
@@ -218,6 +228,7 @@ public class lending extends javax.swing.JInternalFrame {
         jLabel10.setText("Quantity");
 
         itemCombo.setEditable(true);
+        itemCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Item" }));
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
@@ -402,67 +413,67 @@ public class lending extends javax.swing.JInternalFrame {
         if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
-
             String description = (itemCombo.getSelectedItem()).toString();
-            String Qtyonhand = itemCode.getText();
+            String itemCodeStr = itemCode.getText();
             String unitPrice = unitPriceText.getText();
             String qty = qtyText.getText();
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
             double qtty = Double.parseDouble(qty);
             double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
-
-            String dbQty;
-            try {
-                dbQty = getQOHtoCompare(Qtyonhand);
-                int dbQty1 = Integer.parseInt(dbQty);
-
-                if (dbQty1 < Integer.parseInt(qty)) {
-
-                    JOptionPane.showMessageDialog(lending.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    total += ammount;
-                    Object[] rowData = {Qtyonhand, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
-                    ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
-                    //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
-                    qtyText.setText("");
-                    unitPriceText.setText("");
-                    discount.setValue(0);
-                    totalText.setText(Double.toString(total));
-                }
-
-            } catch (SQLException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+            int dbQty = itemQtyList.get(itemCodeStr);
+            if (dbQty < Integer.parseInt(qty)) {
+                JOptionPane.showMessageDialog(lending.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                total += ammount;
+                Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
+                ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
+                itemQtyList.put(itemCodeStr, dbQty - Integer.parseInt(qty));
+                qtyText.setText("");
+                discount.setValue(0);
+                totalText.setText(Double.toString(total));
             }
         }
-
+        qtyText.requestFocus();
     }//GEN-LAST:event_addbutActionPerformed
 
     private void removebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebutActionPerformed
         int selectedRowCount = itemTable.getSelectedRowCount();
         if (selectedRowCount > 0) {
-            int selectedRowIndex = itemTable.getSelectedRow();
-            String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
-            total -= Double.parseDouble(val);
-
-            for (int i = 0; i < selectedRowCount; i++) {
-                int selectedRow = itemTable.getSelectedRow();
-                ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRow);
+            int selectedRowIndexies[] = itemTable.getSelectedRows();
+            selectedRowIndexies = commonUtil.reverseArray(selectedRowIndexies);
+            for (int selectedRowIndex : selectedRowIndexies) {
+                String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
+                total -= Double.parseDouble(val);
+                totalText.setText(Double.toString(total));
+                String itemCodeStr = (String) itemTable.getValueAt(selectedRowIndex, 0);
+                String qtyString = (String) itemTable.getValueAt(selectedRowIndex, 2);
+                itemQtyList.put(itemCodeStr, itemQtyList.get(itemCodeStr) + Integer.parseInt(qtyString));
+                ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRowIndex);
             }
-            totalText.setText(Double.toString(total));
         } else {
             JOptionPane.showMessageDialog(lending.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_removebutActionPerformed
 
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
-        try {
-            itemCode.setText(fillItemCode(itemCombo));
-            unitPriceText.setText(fillUnitPriceBox(itemCombo));
-        } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+        if (itemCombo.getSelectedItem() == "Select Item") {
+            itemCode.setText("");
+            unitPriceText.setText("");
+            qtyText.setText("");
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            rowCount = 0;
+        } else {
+            try {
+                itemCode.setText(fillItemCode(itemCombo));
+                unitPriceText.setText(fillUnitPriceBox(itemCombo));
+                qtyText.requestFocus();
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -477,14 +488,21 @@ public class lending extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_addCustButActionPerformed
 
     private void custNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custNameComboActionPerformed
-        try {
-//            custNameCombo.removeAllItems();
-//            fillCustomerComboBox();
-            custAddressText.setText(fillCustAddress(custNameCombo));
-            custIDText.setText(fillCustID(custNameCombo));
-        } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+        if (custNameCombo.getSelectedItem() == "Select Customer") {
+            custAddressText.setText("");
+            custIDText.setText("");
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            rowCount = 0;
+        } else {
+            try {
+                custAddressText.setText(fillCustAddress(custNameCombo));
+                custIDText.setText(fillCustID(custNameCombo));
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_custNameComboActionPerformed
 
@@ -497,8 +515,8 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void savebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savebutActionPerformed
         int rowCount = itemTable.getRowCount();
-        if (rowCount == 0) {
-            JOptionPane.showMessageDialog(lending.this, "Please Add Some Details", "Warnning", JOptionPane.WARNING_MESSAGE);
+        if (rowCount == 0 || custNameCombo.getSelectedItem() == "Select Customer") {
+            JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields", "Warnning", JOptionPane.WARNING_MESSAGE);
             qtyText.requestFocus();
         } else {
             String custId = custIDText.getText();
@@ -543,44 +561,57 @@ public class lending extends javax.swing.JInternalFrame {
      */
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Customer> customers = customerController.getAllCustomers();
-        custNameCombo.removeAllItems();
         for (Customer customer : customers) {
-            custNameCombo.addItem(customer.getCustName());
+            if (((DefaultComboBoxModel) custNameCombo.getModel()).getIndexOf(customer) == -1) {
+                custNameCombo.addItem(customer);
+            }
         }
-        autoCompletion1.enable(custNameCombo);
     }
 
     private String fillCustAddress(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String address = (combo.getSelectedItem()).toString();
-        String iCode = getCustAddress(address);
-        return iCode;
+        if (custNameCombo.getSelectedItem() == "Select Customer") {
+            return "";
+        } else {
+            String address = (combo.getSelectedItem()).toString();
+            String iCode = getCustAddress(address);
+            return iCode;
+        }
     }
 
     private String fillCustID(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String address = (combo.getSelectedItem()).toString();
-        String iCode = getCustID(address);
-        return iCode;
+        if (custNameCombo.getSelectedItem() == "Select Customer") {
+            return "";
+        } else {
+            String address = (combo.getSelectedItem()).toString();
+            String iCode = getCustID(address);
+            return iCode;
+        }
     }
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
         ArrayList<Item> items = itemController.getAllItems();
-        itemCombo.removeAllItems();
         for (Item item : items) {
-            itemCombo.addItem(item.toString());
+            if (((DefaultComboBoxModel) itemCombo.getModel()).getIndexOf(item) == -1) {
+                itemQtyList.put(item.getItemCode(), item.getQtyOnHand());
+                itemCombo.addItem(item.toString());
+            }
         }
-        autoCompletion1.enable(itemCombo);
     }
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
-        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-")+2);
-        String iCode = getItemDetailsByName(description).getString("item_code");
-        return iCode;
+        if (itemCombo.getSelectedItem() == "Select Item") {
+            return "";
+        } else {
+            String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+            String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
+            String iCode = getItemDetailsByName(description).getString("item_code");
+            return iCode;
+        }
     }
-    
+
     private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
         String itemCodeWithDescription = (combo.getSelectedItem()).toString();
-        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-")+2);
+        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
         String iCode = getItemDetailsByName(description).getString("selling_price");
         return iCode;
     }

@@ -61,7 +61,7 @@ public class itemController {
     }
 
     public static int updateItems(Item item) throws SQLException, ClassNotFoundException {
-        String query = "update item set descr='" + item.getDescription() + "', purchasing_price='" + item.getPurchasePrice() + "', selling_price='" + item.getUnitPrice() + "',qtyonhand='" + item.getQtyOnHand() + "' where item_code='" + item.getItemCode() + "'";
+        String query = "update item set descr='" + item.getDescription() + "', purchasing_price='" + item.getPurchasePrice() + "', selling_price='" + item.getUnitPrice() + "', qtyonhand='" + item.getQtyOnHand() + "' where item_code='" + item.getItemCode() + "'";
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 

@@ -22,7 +22,7 @@ public class lendDetailController {
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 
-    public static ArrayList<lendDetail> getAllBurrowDetail(String custName) throws SQLException, ClassNotFoundException {
+    public static ArrayList<lendDetail> getAllLendingDetail(String custName) throws SQLException, ClassNotFoundException {
         String query = "SELECT date,qty,discount,unitprice,descr FROM lend_detail JOIN item ON lend_detail.item_id=item.item_code JOIN customer_detail ON lend_detail.cust_id=customer_detail.cust_id WHERE customer_detail.cust_name='" + custName + "'";
         ResultSet rst = DBconnect.DBconnect().createStatement().executeQuery(query);
 

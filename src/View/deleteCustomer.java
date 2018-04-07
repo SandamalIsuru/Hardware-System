@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class deleteCustomer extends javax.swing.JInternalFrame {
 
+    private ArrayList<Customer> customerList = null;
     /**
      * Creates new form deleteCustomer
      */
@@ -27,7 +28,9 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(deleteButton);
 
         try {
+            customerList = customerController.getAllCustomers();
             fillCustomerComboBox();
+            autoCompletion1.enable(customerCombo);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
@@ -43,6 +46,7 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -160,6 +164,7 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
             int res = customerController.deleteCustomer(custId);
             if (res > 0) {
                 JOptionPane.showMessageDialog(deleteCustomer.this, "Deleted..." + custId);
+                customerList = customerController.getAllCustomers();
                 addressText.setText("");
                 contactText.setText("");
                 fillCustomerComboBox();
@@ -178,7 +183,6 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
             addressText.setText(customer.getCustAddress());
             contactText.setText(customer.getCustTel());
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_customerComboActionPerformed
 
@@ -218,7 +222,6 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
     }
 
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> customerList = customerController.getAllCustomers();
         customerCombo.removeAllItems();
         for (Customer customer : customerList) {
             customerCombo.addItem(customer);
@@ -227,6 +230,7 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressText;
+    private Common.AutoCompletion autoCompletion1;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField contactText;
     private javax.swing.JComboBox customerCombo;

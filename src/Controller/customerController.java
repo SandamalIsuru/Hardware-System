@@ -25,7 +25,6 @@ public class customerController {
     public static ArrayList<Customer> getAllCustomers() throws SQLException, ClassNotFoundException {
         String query = "select * from customer_detail";
         ResultSet rst = DBconnect.DBconnect().createStatement().executeQuery(query);
-
         ArrayList<Customer> customers = new ArrayList<>();
         while (rst.next()) {
             Customer customer = new Customer(rst.getString("cust_id"), rst.getString("cust_name"), rst.getString("address"), rst.getString("tel"));

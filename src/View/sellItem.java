@@ -5,6 +5,8 @@
  */
 package View;
 
+import static Controller.itemController.getItemDetailsByName;
+import Common.CommonUtil;
 import Controller.itemController;
 import static Controller.itemController.getQtyOnHand;
 import Model.Item;
@@ -15,10 +17,12 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static Controller.itemController.getItemDetailsByName;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -26,7 +30,11 @@ import java.util.List;
  */
 public class sellItem extends javax.swing.JInternalFrame {
 
+    int rowCount = 0;
     double total = 0;
+    ArrayList<Item> items = null;
+    Map<String, Integer> itemQtyList = new HashMap<String, Integer>(); //To keep QTY of all items
+    CommonUtil commonUtil = null;
 
     /**
      * Creates new form sellItem
@@ -34,11 +42,15 @@ public class sellItem extends javax.swing.JInternalFrame {
     public sellItem() {
         initComponents();
 
+        commonUtil = new CommonUtil();
         itemCode.setEditable(false);
 
         try {
+            items = itemController.getAllItems();
             fillItemComboBox();
+            autoCompletion1.enable(itemCombo);
             itemCode.setText(fillItemCode(itemCombo));
+            qtyText.requestFocus();
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,8 +88,6 @@ public class sellItem extends javax.swing.JInternalFrame {
         okbut = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         totalText = new javax.swing.JTextField();
-        autocompleteJComboBox1 = new TestFolder.AutocompleteJComboBox();
-        itemCombo1 = new javax.swing.JComboBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,6 +134,7 @@ public class sellItem extends javax.swing.JInternalFrame {
         jLabel5.setText("Unit Price");
 
         itemCombo.setEditable(true);
+        itemCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Item" }));
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
@@ -188,20 +199,6 @@ public class sellItem extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Total");
 
-        autocompleteJComboBox1.setRequestFocusEnabled(true);
-        autocompleteJComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                autocompleteJComboBox1ActionPerformed(evt);
-            }
-        });
-
-        itemCombo1.setEditable(true);
-        itemCombo1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemCombo1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -224,9 +221,7 @@ public class sellItem extends javax.swing.JInternalFrame {
                             .addComponent(itemCombo, 0, 233, Short.MAX_VALUE)
                             .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(discount, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                            .addComponent(unitPriceText)
-                            .addComponent(autocompleteJComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(itemCombo1, 0, 233, Short.MAX_VALUE))
+                            .addComponent(unitPriceText))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -275,24 +270,17 @@ public class sellItem extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(addbut)
-                            .addComponent(removebut)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(autocompleteJComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(itemCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addbut)
+                    .addComponent(removebut))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel)
                     .addComponent(okbut))
@@ -303,7 +291,6 @@ public class sellItem extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-
         int res = JOptionPane.showConfirmDialog(sellItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
             sellItem.this.dispose();
@@ -314,50 +301,48 @@ public class sellItem extends javax.swing.JInternalFrame {
         if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
             JOptionPane.showMessageDialog(sellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
-
             String description = (itemCombo.getSelectedItem()).toString();
-            String Qtyonhand = itemCode.getText();
+            String itemCodeStr = itemCode.getText();
             String unitPrice = unitPriceText.getText();
             String qty = qtyText.getText();
             int disc = (Integer) discount.getValue();
             double up = Double.parseDouble(unitPrice);
             double qtty = Double.parseDouble(qty);
             double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
+            int dbQty = itemQtyList.get(itemCodeStr);
+            if (dbQty < Integer.parseInt(qty)) {
+                JOptionPane.showMessageDialog(sellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                total += ammount;
+                Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
+                ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
+                itemQtyList.put(itemCodeStr, dbQty - Integer.parseInt(qty));
+                qtyText.setText("");
+                discount.setValue(0);
+                totalText.setText(Double.toString(total));
+            }
+        }
+        qtyText.requestFocus();
+    }//GEN-LAST:event_addbutActionPerformed
 
-            String dbQty;
+    private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
+        if (itemCombo.getSelectedItem() == "Select Item") {
+            itemCode.setText("");
+            unitPriceText.setText("");
+            qtyText.setText("");
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            rowCount = 0;
+        } else {
             try {
-                dbQty = getQOHtoCompare(Qtyonhand);
-                int dbQty1 = Integer.parseInt(dbQty);
-
-                if (dbQty1 < Integer.parseInt(qty)) {
-
-                    JOptionPane.showMessageDialog(sellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    total += ammount;
-                    Object[] rowData = {Qtyonhand, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
-                    ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
-                    //int res = itemController.updateItemQty(dbQty1, Integer.parseInt(qty), Qtyonhand);
-                    qtyText.setText("");
-                    unitPriceText.setText("");
-                    discount.setValue(0);
-                    totalText.setText(Double.toString(total));
-                }
-
+                itemCode.setText(fillItemCode(itemCombo));
+                unitPriceText.setText(fillUnitPriceBox(itemCombo));
+                qtyText.requestFocus();
             } catch (SQLException | ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-    }//GEN-LAST:event_addbutActionPerformed
-
-    private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
-        try {
-            itemCode.setText(fillItemCode(itemCombo));
-            unitPriceText.setText(fillUnitPriceBox(itemCombo));
-        } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -367,17 +352,18 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private void removebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebutActionPerformed
         int selectedRowCount = itemTable.getSelectedRowCount();
-
         if (selectedRowCount > 0) {
-            int selectedRowIndex = itemTable.getSelectedRow();
-            String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
-            total -= Double.parseDouble(val);
-
-            for (int i = 0; i < selectedRowCount; i++) {
-                int selectedRow = itemTable.getSelectedRow();
-                ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRow);
+            int selectedRowIndexies[] = itemTable.getSelectedRows();
+            selectedRowIndexies = commonUtil.reverseArray(selectedRowIndexies);
+            for (int selectedRowIndex : selectedRowIndexies) {
+                String val = (String) itemTable.getValueAt(selectedRowIndex, 5);
+                total -= Double.parseDouble(val);
+                totalText.setText(Double.toString(total));
+                String itemCodeStr = (String) itemTable.getValueAt(selectedRowIndex, 0);
+                String qtyString = (String) itemTable.getValueAt(selectedRowIndex, 2);
+                itemQtyList.put(itemCodeStr, itemQtyList.get(itemCodeStr) + Integer.parseInt(qtyString));
+                ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRowIndex);
             }
-            totalText.setText(Double.toString(total));
         } else {
             JOptionPane.showMessageDialog(sellItem.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
@@ -385,8 +371,10 @@ public class sellItem extends javax.swing.JInternalFrame {
 
     private void okbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okbutActionPerformed
         int rowCount = itemTable.getRowCount();
-        if (rowCount > 0) {
-
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(sellItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
+        }
+        if (rowCount > 0 && itemCombo.getSelectedItem() != "Select Item") {
             for (int i = 0; i < rowCount; i++) {
                 String itemCode = (String) itemTable.getValueAt(i, 0);
                 int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
@@ -427,14 +415,6 @@ public class sellItem extends javax.swing.JInternalFrame {
         System.out.println("Key pressed");
     }//GEN-LAST:event_formKeyTyped
 
-    private void autocompleteJComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autocompleteJComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_autocompleteJComboBox1ActionPerformed
-
-    private void itemCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemCombo1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_itemCombo1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -471,20 +451,24 @@ public class sellItem extends javax.swing.JInternalFrame {
     }
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Item> items = itemController.getAllItems();
         List<String> list = new ArrayList<String>();
-        itemCombo.removeAllItems();
         for (Item item : items) {
-            itemCombo.addItem(item.toString());
+            if (((DefaultComboBoxModel) itemCombo.getModel()).getIndexOf(item) == -1) {
+                itemQtyList.put(item.getItemCode(), item.getQtyOnHand());
+                itemCombo.addItem(item);
+            }
         }
-        autoCompletion1.enable(itemCombo);
     }
 
     private String fillItemCode(JComboBox combo) throws SQLException, ClassNotFoundException {
-        String itemCodeWithDescription = (combo.getSelectedItem()).toString();
-        String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
-        String iCode = getItemDetailsByName(description).getString("item_code");
-        return iCode;
+        if (itemCombo.getSelectedItem() == "Select Item") {
+            return "";
+        } else {
+            String itemCodeWithDescription = (combo.getSelectedItem()).toString();
+            String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
+            String iCode = getItemDetailsByName(description).getString("item_code");
+            return iCode;
+        }
     }
 
     private String fillUnitPriceBox(JComboBox combo) throws SQLException, ClassNotFoundException {
@@ -502,12 +486,10 @@ public class sellItem extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;
     private Common.AutoCompletion autoCompletion1;
-    private TestFolder.AutocompleteJComboBox autocompleteJComboBox1;
     private javax.swing.JButton cancel;
     private javax.swing.JSpinner discount;
     private javax.swing.JTextField itemCode;
     private javax.swing.JComboBox itemCombo;
-    private javax.swing.JComboBox itemCombo1;
     private javax.swing.JTable itemTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

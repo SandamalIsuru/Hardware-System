@@ -33,6 +33,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(cancelbut);
         try {
             fillCustomerComboBox();
+            autoCompletion1.enable(custNameCombo);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(viewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,6 +49,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -90,6 +92,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Customer Name");
 
+        custNameCombo.setEditable(true);
         custNameCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Customer" }));
         custNameCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,7 +185,7 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                 String custName = customer.getCustName();
 
                 ArrayList<lendDetail> lenddetails;
-                lenddetails = lendDetailController.getAllBurrowDetail(custName);
+                lenddetails = lendDetailController.getAllLendingDetail(custName);
                 for (int i = rowCount - 1; i >= 0; i--) {
                     ((DefaultTableModel) table.getModel()).removeRow(i);
                 }
@@ -255,11 +258,11 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                 custNameCombo.addItem(customer);
             }
         }
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressText;
+    private Common.AutoCompletion autoCompletion1;
     private javax.swing.JButton cancelbut;
     private javax.swing.JComboBox custNameCombo;
     private javax.swing.JLabel jLabel1;

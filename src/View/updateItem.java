@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class updateItem extends javax.swing.JInternalFrame {
 
+    ArrayList<Item> itemList = null;
     /**
      * Creates new form updateItem
      */
@@ -27,7 +29,9 @@ public class updateItem extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(updateButton);
 
         try {
+            itemList = itemController.getAllItems();
             fillItemComboBox();
+            autoCompletion1.enable(itemCombo);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,6 +48,7 @@ public class updateItem extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel5 = new javax.swing.JLabel();
         itemCombo = new javax.swing.JComboBox();
         descriptionText = new javax.swing.JTextField();
@@ -183,10 +188,10 @@ public class updateItem extends javax.swing.JInternalFrame {
         try {
             Item item = (Item) itemCombo.getSelectedItem();
             descriptionText.setText(item.getDescription());
+            purchasePriceText.setText(item.getPurchasePrice() + "");
             priceText.setText(item.getUnitPrice() + "");
             qtyText.setText(item.getQtyOnHand() + "");
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -205,14 +210,22 @@ public class updateItem extends javax.swing.JInternalFrame {
             double purchasePrice = Double.parseDouble(purchasePriceText.getText());
             int qtyOnHand = Integer.parseInt(qtyText.getText());
 
+            System.out.println("======" + description+"======" +unitPrice+"======" +purchasePrice+"======" +qtyOnHand);
             Item item = new Item(itemCode, description, purchasePrice, unitPrice, qtyOnHand);
             int res = itemController.updateItems(item);
             if (res > 0) {
                 JOptionPane.showMessageDialog(updateItem.this, "Update Successfully...");
+                itemList = itemController.getAllItems();
                 descriptionText.setText("");
+                purchasePriceText.setText("");
                 priceText.setText("");
                 qtyText.setText("");
-                fillItemComboBox();
+                try {
+                    fillItemComboBox();
+                } catch (SQLException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 itemCombo.requestFocus();
             } else {
                 JOptionPane.showMessageDialog(updateItem.this, "Update failed...");
@@ -260,15 +273,17 @@ public class updateItem extends javax.swing.JInternalFrame {
     }
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Item> itemList = itemController.getAllItems();
         itemCombo.removeAllItems();
         for (Item item : itemList) {
-            itemCombo.addItem(item);
+            if (((DefaultComboBoxModel) itemCombo.getModel()).getIndexOf(item) == -1) {
+                itemCombo.addItem(item);
+            }
         }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Common.AutoCompletion autoCompletion1;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField descriptionText;
     private javax.swing.JComboBox itemCombo;

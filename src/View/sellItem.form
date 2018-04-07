@@ -76,8 +76,6 @@
                           <Component id="qtyText" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
                           <Component id="discount" alignment="0" pref="93" max="32767" attributes="0"/>
                           <Component id="unitPriceText" alignment="0" max="32767" attributes="0"/>
-                          <Component id="autocompleteJComboBox1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="itemCombo1" alignment="0" pref="233" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -143,29 +141,19 @@
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="discount" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="addbut" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="removebut" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                      <Component id="autocompleteJComboBox1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="addbut" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="removebut" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="itemCombo1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="127" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="153" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="totalText" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="okbut" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -222,7 +210,9 @@
       <Properties>
         <Property name="editable" type="boolean" value="true"/>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
+          <StringArray count="1">
+            <StringItem index="0" value="Select Item"/>
+          </StringArray>
         </Property>
       </Properties>
       <Events>
@@ -349,25 +339,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="totalText">
-    </Component>
-    <Component class="TestFolder.AutocompleteJComboBox" name="autocompleteJComboBox1">
-      <Properties>
-        <Property name="requestFocusEnabled" type="boolean" value="true"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="autocompleteJComboBox1ActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="itemCombo1">
-      <Properties>
-        <Property name="editable" type="boolean" value="true"/>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemCombo1ActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class updateCustomer extends javax.swing.JInternalFrame {
 
+    ArrayList<Customer> customers = null;
     /**
      * Creates new form updateCustomer
      */
@@ -27,7 +29,9 @@ public class updateCustomer extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(addbut);
 
         try {
+            customers = customerController.getAllCustomers();
             fillCustomerComboBox();
+            autoCompletion1.enable(custNameCombo);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(updateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
@@ -43,6 +47,7 @@ public class updateCustomer extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel1 = new javax.swing.JLabel();
         addresstext = new javax.swing.JTextField();
         nametext = new javax.swing.JTextField();
@@ -185,15 +190,11 @@ public class updateCustomer extends javax.swing.JInternalFrame {
             res = customerController.updateCustomer(customer);
             if (res > 0) {
                 JOptionPane.showMessageDialog(updateCustomer.this, "Update Successfully...");
+                customers = customerController.getAllCustomers();
                 nametext.setText("");
                 addresstext.setText("");
                 teltext.setText("");
-                try {
-                    fillCustomerComboBox();
-                } catch (SQLException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(updateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                fillCustomerComboBox();
                 custNameCombo.requestFocus();
             } else {
                 JOptionPane.showMessageDialog(updateCustomer.this, "Update Failed...");
@@ -251,17 +252,18 @@ public class updateCustomer extends javax.swing.JInternalFrame {
     }
 
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> customers = customerController.getAllCustomers();
         custNameCombo.removeAllItems();
         for (Customer customer : customers) {
-            custNameCombo.addItem(customer);
+            if (((DefaultComboBoxModel) custNameCombo.getModel()).getIndexOf(customer) == -1) {
+                custNameCombo.addItem(customer);
+            }
         }
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;
     private javax.swing.JTextField addresstext;
+    private Common.AutoCompletion autoCompletion1;
     private javax.swing.JButton cancelbut;
     private javax.swing.JComboBox custNameCombo;
     private javax.swing.JLabel jLabel1;

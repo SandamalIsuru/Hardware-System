@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class deleteItem extends javax.swing.JInternalFrame {
 
+    private ArrayList<Item> itemList = null;
     /**
      * Creates new form deleteItem
      */
@@ -27,7 +28,9 @@ public class deleteItem extends javax.swing.JInternalFrame {
         this.getRootPane().setDefaultButton(deleteButton);
 
         try {
+            itemList = itemController.getAllItems();
             fillItemComboBox();
+            autoCompletion1.enable(itemCombo);
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -43,6 +46,7 @@ public class deleteItem extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        autoCompletion1 = new Common.AutoCompletion();
         jLabel4 = new javax.swing.JLabel();
         itemCombo = new javax.swing.JComboBox();
         priceText = new javax.swing.JTextField();
@@ -62,7 +66,6 @@ public class deleteItem extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Qty On Hand");
 
-        itemCombo.setEditable(true);
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
@@ -154,7 +157,6 @@ public class deleteItem extends javax.swing.JInternalFrame {
             priceText.setText(item.getUnitPrice() + "");
             qtyText.setText(item.getQtyOnHand() + "");
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_itemComboActionPerformed
 
@@ -164,6 +166,7 @@ public class deleteItem extends javax.swing.JInternalFrame {
             int res = itemController.deleteItem(itemCode);
             if (res > 0) {
                 JOptionPane.showMessageDialog(deleteItem.this, "Deleted..." + itemCode);
+                itemList = itemController.getAllItems();
                 priceText.setText("");
                 qtyText.setText("");
                 fillItemComboBox();
@@ -220,7 +223,6 @@ public class deleteItem extends javax.swing.JInternalFrame {
     }
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Item> itemList = itemController.getAllItems();
         itemCombo.removeAllItems();
         for (Item item : itemList) {
             itemCombo.addItem(item);
@@ -228,6 +230,7 @@ public class deleteItem extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Common.AutoCompletion autoCompletion1;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JComboBox itemCombo;
