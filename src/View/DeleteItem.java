@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.itemController;
+import Controller.ItemController;
 import Model.Item;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,23 +17,23 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class deleteItem extends javax.swing.JInternalFrame {
+public class DeleteItem extends javax.swing.JInternalFrame {
 
     private ArrayList<Item> itemList = null;
     /**
      * Creates new form deleteItem
      */
-    public deleteItem() {
+    public DeleteItem() {
         initComponents();
         this.getRootPane().setDefaultButton(deleteButton);
 
         try {
-            itemList = itemController.getAllItems();
+            itemList = ItemController.getAllItems();
             fillItemComboBox();
             autoCompletion1.enable(itemCombo);
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(DeleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DeleteItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -163,27 +163,27 @@ public class deleteItem extends javax.swing.JInternalFrame {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
             String itemCode = ((Item) itemCombo.getSelectedItem()).getItemCode();
-            int res = itemController.deleteItem(itemCode);
+            int res = ItemController.deleteItem(itemCode);
             if (res > 0) {
-                JOptionPane.showMessageDialog(deleteItem.this, "Deleted..." + itemCode);
-                itemList = itemController.getAllItems();
+                JOptionPane.showMessageDialog(DeleteItem.this, "Deleted..." + itemCode);
+                itemList = ItemController.getAllItems();
                 priceText.setText("");
                 qtyText.setText("");
                 fillItemComboBox();
             } else {
-                JOptionPane.showMessageDialog(deleteItem.this, "Delete failed...");
+                JOptionPane.showMessageDialog(DeleteItem.this, "Delete failed...");
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(deleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(deleteItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(DeleteItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DeleteItem.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        int res = JOptionPane.showConfirmDialog(deleteItem.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(DeleteItem.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            deleteItem.this.dispose();
+            DeleteItem.this.dispose();
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -204,20 +204,21 @@ public class deleteItem extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(deleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(deleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(deleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(deleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new deleteItem().setVisible(true);
+                new DeleteItem().setVisible(true);
             }
         });
     }

@@ -5,17 +5,17 @@
  */
 package main;
 
-import View.addCustomer;
-import View.addItem;
-import View.deleteCustomer;
-import View.deleteItem;
-import View.lending;
-import View.sellItem;
-import View.updateCustomer;
-import View.updateItem;
-import View.viewCustomer;
-import View.viewItem;
-import View.viewLendDetail;
+import View.AddCustomer;
+import View.AddItem;
+import View.DeleteCustomer;
+import View.DeleteItem;
+import View.LendingItem;
+import View.SellItem;
+import View.UpdateCustomer;
+import View.UpdateItem;
+import View.ViewCustomer;
+import View.ViewItem;
+import View.ViewLendDetail;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -285,7 +285,7 @@ public class mainGUI extends javax.swing.JFrame {
     private void lendItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lendItemActionPerformed
 
         mainDesktopPane.removeAll();
-        lending l = new lending();
+        LendingItem l = new LendingItem();
         mainDesktopPane.add(l);
         centerJIF(l);
         mainDesktopPane.repaint();
@@ -295,7 +295,7 @@ public class mainGUI extends javax.swing.JFrame {
     private void sellItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellItemActionPerformed
 
         mainDesktopPane.removeAll();
-        sellItem si = new sellItem();
+        SellItem si = new SellItem();
         mainDesktopPane.add(si);
         centerJIF(si);
         mainDesktopPane.repaint();
@@ -303,7 +303,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void viewCustButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCustButActionPerformed
         mainDesktopPane.removeAll();
-        viewCustomer vc = new viewCustomer();
+        ViewCustomer vc = new ViewCustomer();
         mainDesktopPane.add(vc);
         centerJIF(vc);
         mainDesktopPane.repaint();
@@ -311,7 +311,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void viewItemButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewItemButActionPerformed
         mainDesktopPane.removeAll();
-        viewItem vi = new viewItem();
+        ViewItem vi = new ViewItem();
         mainDesktopPane.add(vi);
         centerJIF(vi);
         mainDesktopPane.repaint();
@@ -326,7 +326,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void addCustomerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        addCustomer ac = new addCustomer();
+        AddCustomer ac = new AddCustomer();
         mainDesktopPane.add(ac);
         centerJIF(ac);
         mainDesktopPane.repaint();
@@ -334,7 +334,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void addItemMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        addItem ai = new addItem();
+        AddItem ai = new AddItem();
         mainDesktopPane.add(ai);
         centerJIF(ai);
         mainDesktopPane.repaint();
@@ -342,7 +342,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void viewAllCustomerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllCustomerMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        viewCustomer vc = new viewCustomer();
+        ViewCustomer vc = new ViewCustomer();
         mainDesktopPane.add(vc);
         centerJIF(vc);
         mainDesktopPane.repaint();
@@ -350,7 +350,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void viewAllItemMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAllItemMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        viewItem vi = new viewItem();
+        ViewItem vi = new ViewItem();
         mainDesktopPane.add(vi);
         centerJIF(vi);
         mainDesktopPane.repaint();
@@ -358,7 +358,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void updateCustomerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCustomerMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        updateCustomer uc = new updateCustomer();
+        UpdateCustomer uc = new UpdateCustomer();
         mainDesktopPane.add(uc);
         centerJIF(uc);
         mainDesktopPane.repaint();
@@ -373,7 +373,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void updateItemMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        updateItem ui = new updateItem();
+        UpdateItem ui = new UpdateItem();
         mainDesktopPane.add(ui);
         centerJIF(ui);
         mainDesktopPane.repaint();
@@ -381,7 +381,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void deleteCustomerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCustomerMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        deleteCustomer dc = new deleteCustomer();
+        DeleteCustomer dc = new DeleteCustomer();
         mainDesktopPane.add(dc);
         centerJIF(dc);
         mainDesktopPane.repaint();
@@ -389,7 +389,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void deleteItemMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteItemMenuItemActionPerformed
         mainDesktopPane.removeAll();
-        deleteItem di = new deleteItem();
+        DeleteItem di = new DeleteItem();
         mainDesktopPane.add(di);
         centerJIF(di);
         mainDesktopPane.repaint();
@@ -397,7 +397,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void viewlendItemBut1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewlendItemBut1ActionPerformed
         mainDesktopPane.removeAll();
-        viewLendDetail vld = new viewLendDetail();
+        ViewLendDetail vld = new ViewLendDetail();
         mainDesktopPane.add(vld);
         centerJIF(vld);
         mainDesktopPane.repaint();

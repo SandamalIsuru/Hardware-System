@@ -5,11 +5,13 @@
  */
 package View;
 
-import static Controller.itemController.getItemDetailsByName;
+import static Controller.ItemController.getItemDetailsByName;
 import Common.CommonUtil;
-import Controller.itemController;
-import static Controller.itemController.getQtyOnHand;
+import Controller.ItemController;
+import static Controller.ItemController.getQtyOnHand;
+import Controller.SoldItemController;
 import Model.Item;
+import Model.SoldItem;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -28,7 +30,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Isuru SanDamal
  */
-public class sellItem extends javax.swing.JInternalFrame {
+public class SellItem extends javax.swing.JInternalFrame {
 
     int rowCount = 0;
     double total = 0;
@@ -39,21 +41,21 @@ public class sellItem extends javax.swing.JInternalFrame {
     /**
      * Creates new form sellItem
      */
-    public sellItem() {
+    public SellItem() {
         initComponents();
 
         commonUtil = new CommonUtil();
         itemCode.setEditable(false);
 
         try {
-            items = itemController.getAllItems();
+            items = ItemController.getAllItems();
             fillItemComboBox();
             autoCompletion1.enable(itemCombo);
             itemCode.setText(fillItemCode(itemCombo));
             qtyText.requestFocus();
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -291,15 +293,15 @@ public class sellItem extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        int res = JOptionPane.showConfirmDialog(sellItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(SellItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            sellItem.this.dispose();
+            SellItem.this.dispose();
         }
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
         if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(sellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(SellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
             String description = (itemCombo.getSelectedItem()).toString();
             String itemCodeStr = itemCode.getText();
@@ -311,7 +313,7 @@ public class sellItem extends javax.swing.JInternalFrame {
             double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
             int dbQty = itemQtyList.get(itemCodeStr);
             if (dbQty < Integer.parseInt(qty)) {
-                JOptionPane.showMessageDialog(sellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(SellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 total += ammount;
                 Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
@@ -340,8 +342,8 @@ public class sellItem extends javax.swing.JInternalFrame {
                 unitPriceText.setText(fillUnitPriceBox(itemCombo));
                 qtyText.requestFocus();
             } catch (SQLException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_itemComboActionPerformed
@@ -365,34 +367,37 @@ public class sellItem extends javax.swing.JInternalFrame {
                 ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRowIndex);
             }
         } else {
-            JOptionPane.showMessageDialog(sellItem.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(SellItem.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_removebutActionPerformed
 
     private void okbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okbutActionPerformed
         int rowCount = itemTable.getRowCount();
         if (rowCount == 0) {
-            JOptionPane.showMessageDialog(sellItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(SellItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
         }
         if (rowCount > 0 && itemCombo.getSelectedItem() != "Select Item") {
             for (int i = 0; i < rowCount; i++) {
                 String itemCode = (String) itemTable.getValueAt(i, 0);
                 int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
+                int soldPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
+                
                 String dbQty;
                 try {
                     dbQty = getQOHtoCompare(itemCode);
                     int dbQty1 = Integer.parseInt(dbQty);
-                    int res = itemController.updateItemQty(dbQty1, qty, itemCode);
+                    //int insertSoldItemRes = SoldItemController.addSoldItem(new SoldItem(1, qty, itemCode, soldPrice));
+                    int res = ItemController.updateItemQty(dbQty1, qty, itemCode);
                 } catch (SQLException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(sellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             for (int i = rowCount - 1; i >= 0; i--) {
                 ((DefaultTableModel) itemTable.getModel()).removeRow(i);
             }
             totalText.setText("");
-            JOptionPane.showMessageDialog(sellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
+            JOptionPane.showMessageDialog(SellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
         }
     }//GEN-LAST:event_okbutActionPerformed
 
@@ -432,20 +437,21 @@ public class sellItem extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new sellItem().setVisible(true);
+                new SellItem().setVisible(true);
             }
         });
     }

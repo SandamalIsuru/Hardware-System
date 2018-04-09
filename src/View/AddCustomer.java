@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.customerController;
+import Controller.CustomerController;
 import Model.Customer;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,19 +17,19 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class addCustomer extends javax.swing.JInternalFrame {
+public class AddCustomer extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form addCustomer
      */
-    public addCustomer() {
+    public AddCustomer() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
         try {
             idtext.setText(generateCustId());
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(addCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(AddCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
         nametext.requestFocus();
@@ -162,7 +162,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
         if (nametext.getText().isEmpty() || addresstext.getText().isEmpty() || teltext.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(addCustomer.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(AddCustomer.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
             nametext.requestFocus();
         } else {
             String custId = idtext.getText();
@@ -173,12 +173,12 @@ public class addCustomer extends javax.swing.JInternalFrame {
 
             try {
                 if (isCustomerExist(customer)) {
-                    JOptionPane.showMessageDialog(addCustomer.this, "Customer already exist...");
+                    JOptionPane.showMessageDialog(AddCustomer.this, "Customer already exist...");
                     nametext.requestFocus();
                 } else {
-                    int res = customerController.addCustomer(customer);
+                    int res = CustomerController.addCustomer(customer);
                     if (res > 0) {
-                        JOptionPane.showMessageDialog(addCustomer.this, "Added Successfully....");
+                        JOptionPane.showMessageDialog(AddCustomer.this, "Added Successfully....");
                         idtext.setText(generateCustId());
                         nametext.setText("");
                         addresstext.setText("");
@@ -186,21 +186,21 @@ public class addCustomer extends javax.swing.JInternalFrame {
                         nametext.requestFocus();
 
                     } else {
-                        JOptionPane.showMessageDialog(addCustomer.this, "Added Fail......", "", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(AddCustomer.this, "Added Fail......", "", JOptionPane.ERROR_MESSAGE);
                         nametext.requestFocus();
                     }
                 }
             } catch (ClassNotFoundException | SQLException ex) {
-                JOptionPane.showMessageDialog(addCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(addCustomer.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(AddCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_addbutActionPerformed
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(addCustomer.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(AddCustomer.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            addCustomer.this.dispose();
+            AddCustomer.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
 
@@ -223,7 +223,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private boolean isCustomerExist(Customer customer) throws ClassNotFoundException, SQLException {
-        ArrayList<Customer> allCustomers = customerController.getAllCustomers();
+        ArrayList<Customer> allCustomers = CustomerController.getAllCustomers();
         for (Customer oneCustomer : allCustomers) {
             if (oneCustomer.getCustName().equalsIgnoreCase(customer.getCustName())) {
                 return true;
@@ -233,7 +233,7 @@ public class addCustomer extends javax.swing.JInternalFrame {
     }
 
     private String generateCustId() throws SQLException, ClassNotFoundException {
-        String custId = customerController.getLastCustId();
+        String custId = CustomerController.getLastCustId();
 
         if (custId == null) {
             return "C0001";

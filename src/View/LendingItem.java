@@ -6,15 +6,15 @@
 package View;
 
 import Common.CommonUtil;
-import Controller.customerController;
-import static Controller.customerController.getCustAddress;
-import static Controller.customerController.getCustID;
-import Controller.itemController;
-import static Controller.itemController.getQtyOnHand;
-import Controller.lendDetailController;
+import Controller.CustomerController;
+import static Controller.CustomerController.getCustAddress;
+import static Controller.CustomerController.getCustID;
+import Controller.ItemController;
+import static Controller.ItemController.getQtyOnHand;
+import Controller.LendDetailController;
 import Model.Customer;
 import Model.Item;
-import Model.lendDetail;
+import Model.LendDetail;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static Controller.itemController.getItemDetailsByName;
+import static Controller.ItemController.getItemDetailsByName;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -33,7 +33,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Isuru SanDamal
  */
-public class lending extends javax.swing.JInternalFrame {
+public class LendingItem extends javax.swing.JInternalFrame {
 
     int rowCount = 0;
     double total = 0;
@@ -45,7 +45,7 @@ public class lending extends javax.swing.JInternalFrame {
     /**
      * Creates new form borrowing
      */
-    public lending() {
+    public LendingItem() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
         commonUtil = new CommonUtil();
@@ -64,8 +64,8 @@ public class lending extends javax.swing.JInternalFrame {
             custIDText.setText(fillCustID(custNameCombo));
             itemCode.setText(fillItemCode(itemCombo));
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(LendingItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -411,7 +411,7 @@ public class lending extends javax.swing.JInternalFrame {
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
         if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(LendingItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
         } else {
             String description = (itemCombo.getSelectedItem()).toString();
             String itemCodeStr = itemCode.getText();
@@ -423,7 +423,7 @@ public class lending extends javax.swing.JInternalFrame {
             double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
             int dbQty = itemQtyList.get(itemCodeStr);
             if (dbQty < Integer.parseInt(qty)) {
-                JOptionPane.showMessageDialog(lending.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(LendingItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 total += ammount;
                 Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
@@ -452,7 +452,7 @@ public class lending extends javax.swing.JInternalFrame {
                 ((DefaultTableModel) itemTable.getModel()).removeRow(selectedRowIndex);
             }
         } else {
-            JOptionPane.showMessageDialog(lending.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(LendingItem.this, "Select an Item..", "", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_removebutActionPerformed
 
@@ -471,8 +471,8 @@ public class lending extends javax.swing.JInternalFrame {
                 unitPriceText.setText(fillUnitPriceBox(itemCombo));
                 qtyText.requestFocus();
             } catch (SQLException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(LendingItem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_itemComboActionPerformed
@@ -482,8 +482,8 @@ public class lending extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_qtyTextActionPerformed
 
     private void addCustButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustButActionPerformed
-        (lending.this.getDesktopPane()).add(new addCustomer());
-        lending.this.toBack();
+        (LendingItem.this.getDesktopPane()).add(new AddCustomer());
+        LendingItem.this.toBack();
 
     }//GEN-LAST:event_addCustButActionPerformed
 
@@ -500,23 +500,23 @@ public class lending extends javax.swing.JInternalFrame {
                 custAddressText.setText(fillCustAddress(custNameCombo));
                 custIDText.setText(fillCustID(custNameCombo));
             } catch (SQLException | ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(LendingItem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_custNameComboActionPerformed
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(lending.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(LendingItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            lending.this.dispose();
+            LendingItem.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
 
     private void savebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savebutActionPerformed
         int rowCount = itemTable.getRowCount();
         if (rowCount == 0 || custNameCombo.getSelectedItem() == "Select Customer") {
-            JOptionPane.showMessageDialog(lending.this, "Please Fill All Fields", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(LendingItem.this, "Please Fill All Fields", "Warnning", JOptionPane.WARNING_MESSAGE);
             qtyText.requestFocus();
         } else {
             String custId = custIDText.getText();
@@ -526,25 +526,25 @@ public class lending extends javax.swing.JInternalFrame {
                 int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
                 int disc = Integer.parseInt((String) itemTable.getValueAt(i, 4));
                 int unitPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
-                lendDetail lenddetail = new lendDetail(custId, itemId, Date, qty, disc, unitPrice);
+                LendDetail lenddetail = new LendDetail(custId, itemId, Date, qty, disc, unitPrice);
                 try {
-                    int res = lendDetailController.addLendDetail(lenddetail);
+                    int res = LendDetailController.addLendDetail(lenddetail);
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(lending.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(LendingItem.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 String dbQty;
                 try {
                     dbQty = getQOHtoCompare(itemId);
                     int dbQty1 = Integer.parseInt(dbQty);
-                    int res1 = itemController.updateItemQty(dbQty1, qty, itemId);
+                    int res1 = ItemController.updateItemQty(dbQty1, qty, itemId);
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(lending.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(sellItem.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -552,7 +552,7 @@ public class lending extends javax.swing.JInternalFrame {
                 ((DefaultTableModel) itemTable.getModel()).removeRow(i);
             }
             totalText.setText("");
-            JOptionPane.showMessageDialog(lending.this, "Added Successfully....");
+            JOptionPane.showMessageDialog(LendingItem.this, "Added Successfully....");
         }
     }//GEN-LAST:event_savebutActionPerformed
 
@@ -560,7 +560,7 @@ public class lending extends javax.swing.JInternalFrame {
      * @param args the command line arguments
      */
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> customers = customerController.getAllCustomers();
+        ArrayList<Customer> customers = CustomerController.getAllCustomers();
         for (Customer customer : customers) {
             if (((DefaultComboBoxModel) custNameCombo.getModel()).getIndexOf(customer) == -1) {
                 custNameCombo.addItem(customer);
@@ -589,7 +589,7 @@ public class lending extends javax.swing.JInternalFrame {
     }
 
     private void fillItemComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Item> items = itemController.getAllItems();
+        ArrayList<Item> items = ItemController.getAllItems();
         for (Item item : items) {
             if (((DefaultComboBoxModel) itemCombo.getModel()).getIndexOf(item) == -1) {
                 itemQtyList.put(item.getItemCode(), item.getQtyOnHand());
@@ -635,20 +635,20 @@ public class lending extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(sellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SellItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new lending().setVisible(true);
+                new LendingItem().setVisible(true);
             }
         });
     }

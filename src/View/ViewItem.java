@@ -5,8 +5,8 @@
  */
 package View;
 
-import Controller.customerController;
-import Model.Customer;
+import Controller.ItemController;
+import Model.Item;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -18,28 +18,29 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Isuru SanDamal
  */
-public class viewCustomer extends javax.swing.JInternalFrame {
+public class ViewItem extends javax.swing.JInternalFrame {
+
+    ArrayList<Item> itemList = null;
 
     /**
-     * Creates new form viewCustomer
+     * Creates new form viewItem
      */
-    public viewCustomer() {
+    public ViewItem() {
         initComponents();
         this.getRootPane().setDefaultButton(cancelbut);
         try {
-            ArrayList<Customer> customerList = customerController.getAllCustomers();
-            if (customerList.isEmpty()) {
-
+            itemList = ItemController.getAllItems();
+            if (itemList.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No item were found");
             } else {
-                for (Customer customer : customerList) {
-                    Object rows[] = {customer.getCustID(), customer.getCustName(), customer.getCustAddress(), customer.getCustTel()};
-                    ((DefaultTableModel) customerTable.getModel()).addRow(rows);
+                for (Item item : itemList) {
+                    Object rows[] = {item.getItemCode(), item.getDescription(), item.getPurchasePrice(), item.getUnitPrice(), item.getQtyOnHand()};
+                    ((DefaultTableModel) itemTable.getModel()).addRow(rows);
                 }
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(viewCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(viewCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(ViewItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(ViewItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
     }
@@ -53,9 +54,9 @@ public class viewCustomer extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        customerTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        itemTable = new javax.swing.JTable();
         cancelbut = new javax.swing.JButton();
 
         setClosable(true);
@@ -64,28 +65,33 @@ public class viewCustomer extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
 
-        customerTable.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Item Table");
+
+        itemTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Name", "address", "Contact"
+                "Item Code", "Item Name", "Purchase Price", "Unit Price", "QTY"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(customerTable);
+        itemTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(itemTable);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Customer Table");
-
-        cancelbut.setBackground(new java.awt.Color(255, 255, 255));
         cancelbut.setText("Close");
         cancelbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,39 +104,60 @@ public class viewCustomer extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(233, 233, 233)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(cancelbut)))
+                        .addComponent(cancelbut))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cancelbut)
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(viewCustomer.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(ViewItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            viewCustomer.this.dispose();
+            ViewItem.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
+
+    private void itemTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemTableMouseClicked
+        /*Object selectedRow = ((DefaultTableModel) itemTable.getModel()).getDataVector().elementAt(itemTable.getSelectedRow());
+//        if(){
+//            
+//        }
+        int row = itemTable.getEditingRow();
+
+        System.out.println("----------"+row);
+        itemTable.setCellSelectionEnabled(true);
+        
+        String selectedData = null;
+
+        System.out.println(selectedRow.toString());
+       // for (int i = 0; i < selectedRow.length; i++) {
+//            System.out.println("Selected Row: " + i);
+//            for (int j = 0; j < selectedColumns.length; j++) {
+//                System.out.println("Selected Column: " + j);
+//                selectedData = (String) itemTable.getValueAt(selectedRow[i], selectedColumns[j]);
+//            } 
+        //}*/
+    }//GEN-LAST:event_itemTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -149,27 +176,29 @@ public class viewCustomer extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new viewCustomer().setVisible(true);
+                new ViewItem().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelbut;
-    private javax.swing.JTable customerTable;
+    private javax.swing.JTable itemTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

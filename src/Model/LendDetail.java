@@ -9,7 +9,7 @@ package Model;
  *
  * @author Isuru SanDamal
  */
-public class lendDetail {
+public class LendDetail {
 
     private String custID;
     private String itemID;
@@ -19,10 +19,10 @@ public class lendDetail {
     private int discount;
     private double unitSellPrice;
 
-    public lendDetail() {
+    public LendDetail() {
     }
 
-    public lendDetail(String custId, String itemId, String date, int qty, int discount, double unitSellPrice) {
+    public LendDetail(String custId, String itemId, String date, int qty, int discount, double unitSellPrice) {
         this.custID = custId;
         this.itemID = itemId;
         this.date = date;
@@ -31,7 +31,7 @@ public class lendDetail {
         this.unitSellPrice = unitSellPrice;
     }
 
-    public lendDetail(String itemName, String date, int qty, int discount, double unitSellPrice) {
+    public LendDetail(String itemName, String date, int qty, int discount, double unitSellPrice) {
         this.itemName = itemName;
         this.date = date;
         this.QTY = qty;

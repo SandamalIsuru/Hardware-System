@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Isuru SanDamal
  */
-public class itemController {
+public class ItemController {
 
     public static int addItem(Item item) throws SQLException {
         String query = "Insert into item values('" + item.getItemCode() + "','" + item.getDescription() + "','" + item.getPurchasePrice() + "','" + item.getUnitPrice() + "','" + item.getQtyOnHand() + "')";

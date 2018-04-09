@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Isuru SanDamal
  */
-public class customerController {
+public class CustomerController {
 
     public static int addCustomer(Customer customer) throws SQLException {
         String query = "Insert into customer_detail values('" + customer.getCustID() + "','" + customer.getCustName() + "','" + customer.getCustAddress() + "','" + customer.getCustTel() + "')";

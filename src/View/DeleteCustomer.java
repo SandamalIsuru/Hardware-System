@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.customerController;
+import Controller.CustomerController;
 import Model.Customer;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,23 +17,23 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class deleteCustomer extends javax.swing.JInternalFrame {
+public class DeleteCustomer extends javax.swing.JInternalFrame {
 
     private ArrayList<Customer> customerList = null;
     /**
      * Creates new form deleteCustomer
      */
-    public deleteCustomer() {
+    public DeleteCustomer() {
         initComponents();
         this.getRootPane().setDefaultButton(deleteButton);
 
         try {
-            customerList = customerController.getAllCustomers();
+            customerList = CustomerController.getAllCustomers();
             fillCustomerComboBox();
             autoCompletion1.enable(customerCombo);
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(DeleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DeleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -152,28 +152,28 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        int res = JOptionPane.showConfirmDialog(deleteCustomer.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(DeleteCustomer.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            deleteCustomer.this.dispose();
+            DeleteCustomer.this.dispose();
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
             String custId = ((Customer) customerCombo.getSelectedItem()).getCustID();
-            int res = customerController.deleteCustomer(custId);
+            int res = CustomerController.deleteCustomer(custId);
             if (res > 0) {
-                JOptionPane.showMessageDialog(deleteCustomer.this, "Deleted..." + custId);
-                customerList = customerController.getAllCustomers();
+                JOptionPane.showMessageDialog(DeleteCustomer.this, "Deleted..." + custId);
+                customerList = CustomerController.getAllCustomers();
                 addressText.setText("");
                 contactText.setText("");
                 fillCustomerComboBox();
             } else {
-                JOptionPane.showMessageDialog(deleteCustomer.this, "Delete failed...");
+                JOptionPane.showMessageDialog(DeleteCustomer.this, "Delete failed...");
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(deleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(deleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(DeleteCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(DeleteCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
@@ -203,20 +203,21 @@ public class deleteCustomer extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(deleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(deleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(deleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(deleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new deleteCustomer().setVisible(true);
+                new DeleteCustomer().setVisible(true);
             }
         });
     }

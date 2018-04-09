@@ -5,10 +5,10 @@
  */
 package View;
 
-import Controller.customerController;
-import Controller.lendDetailController;
+import Controller.CustomerController;
+import Controller.LendDetailController;
 import Model.Customer;
-import Model.lendDetail;
+import Model.LendDetail;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,22 +21,22 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Isuru SanDamal
  */
-public class viewLendDetail extends javax.swing.JInternalFrame {
+public class ViewLendDetail extends javax.swing.JInternalFrame {
 
     int rowCount = 0;
 
     /**
      * Creates new form viewLendDetail
      */
-    public viewLendDetail() {
+    public ViewLendDetail() {
         initComponents();
         this.getRootPane().setDefaultButton(cancelbut);
         try {
             fillCustomerComboBox();
             autoCompletion1.enable(custNameCombo);
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(viewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(ViewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(ViewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -184,12 +184,12 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
 
                 String custName = customer.getCustName();
 
-                ArrayList<lendDetail> lenddetails;
-                lenddetails = lendDetailController.getAllLendingDetail(custName);
+                ArrayList<LendDetail> lenddetails;
+                lenddetails = LendDetailController.getAllLendingDetail(custName);
                 for (int i = rowCount - 1; i >= 0; i--) {
                     ((DefaultTableModel) table.getModel()).removeRow(i);
                 }
-                for (lendDetail lenddetail : lenddetails) {
+                for (LendDetail lenddetail : lenddetails) {
                     Object[] rowData = {lenddetail.getItemName(), lenddetail.getDate(), lenddetail.getQTY(), lenddetail.getDiscount(), lenddetail.getUnitSellPrice(), ((lenddetail.getUnitSellPrice() * lenddetail.getQTY()) - ((lenddetail.getUnitSellPrice() * lenddetail.getQTY()) * (lenddetail.getDiscount() / 100.0)))};
                     ((DefaultTableModel) table.getModel()).addRow(rowData);
                 }
@@ -203,16 +203,16 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                 }
                 totalText.setText(Double.toString(total));
             } catch (SQLException | ClassNotFoundException | NullPointerException ex) {
-                JOptionPane.showMessageDialog(viewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(viewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(ViewLendDetail.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(ViewLendDetail.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_custNameComboActionPerformed
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(viewLendDetail.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(ViewLendDetail.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            viewLendDetail.this.dispose();
+            ViewLendDetail.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
 
@@ -233,26 +233,27 @@ public class viewLendDetail extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewLendDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new viewLendDetail().setVisible(true);
+                new ViewLendDetail().setVisible(true);
             }
         });
     }
 
     private void fillCustomerComboBox() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> customers = customerController.getAllBurrowCustomers();
+        ArrayList<Customer> customers = CustomerController.getAllBurrowCustomers();
         for (Customer customer : customers) {
             if (((DefaultComboBoxModel) custNameCombo.getModel()).getIndexOf(customer) == -1) {
                 custNameCombo.addItem(customer);

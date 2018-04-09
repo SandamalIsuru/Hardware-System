@@ -5,7 +5,7 @@
  */
 package Common;
 
-import View.sellItem;
+import View.SellItem;
 import java.awt.Component;
 import java.util.Map;
 import javax.swing.JOptionPane;

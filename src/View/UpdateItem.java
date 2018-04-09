@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.itemController;
+import Controller.ItemController;
 import Model.Item;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,23 +18,23 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class updateItem extends javax.swing.JInternalFrame {
+public class UpdateItem extends javax.swing.JInternalFrame {
 
     ArrayList<Item> itemList = null;
     /**
      * Creates new form updateItem
      */
-    public updateItem() {
+    public UpdateItem() {
         initComponents();
         this.getRootPane().setDefaultButton(updateButton);
 
         try {
-            itemList = itemController.getAllItems();
+            itemList = ItemController.getAllItems();
             fillItemComboBox();
             autoCompletion1.enable(itemCombo);
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(UpdateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(UpdateItem.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -196,9 +196,9 @@ public class updateItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_itemComboActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        int res = JOptionPane.showConfirmDialog(updateItem.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(UpdateItem.this, "Do you want to exit?", "", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            updateItem.this.dispose();
+            UpdateItem.this.dispose();
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -212,10 +212,10 @@ public class updateItem extends javax.swing.JInternalFrame {
 
             System.out.println("======" + description+"======" +unitPrice+"======" +purchasePrice+"======" +qtyOnHand);
             Item item = new Item(itemCode, description, purchasePrice, unitPrice, qtyOnHand);
-            int res = itemController.updateItems(item);
+            int res = ItemController.updateItems(item);
             if (res > 0) {
-                JOptionPane.showMessageDialog(updateItem.this, "Update Successfully...");
-                itemList = itemController.getAllItems();
+                JOptionPane.showMessageDialog(UpdateItem.this, "Update Successfully...");
+                itemList = ItemController.getAllItems();
                 descriptionText.setText("");
                 purchasePriceText.setText("");
                 priceText.setText("");
@@ -223,17 +223,17 @@ public class updateItem extends javax.swing.JInternalFrame {
                 try {
                     fillItemComboBox();
                 } catch (SQLException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(UpdateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(UpdateCustomer.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 itemCombo.requestFocus();
             } else {
-                JOptionPane.showMessageDialog(updateItem.this, "Update failed...");
+                JOptionPane.showMessageDialog(UpdateItem.this, "Update failed...");
                 descriptionText.requestFocus();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(updateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(updateItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(UpdateItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(UpdateItem.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
@@ -254,20 +254,21 @@ public class updateItem extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(updateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(updateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(updateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(updateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new updateItem().setVisible(true);
+                new UpdateItem().setVisible(true);
             }
         });
     }

@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.customerController;
+import Controller.CustomerController;
 import Model.Customer;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,23 +18,23 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class updateCustomer extends javax.swing.JInternalFrame {
+public class UpdateCustomer extends javax.swing.JInternalFrame {
 
     ArrayList<Customer> customers = null;
     /**
      * Creates new form updateCustomer
      */
-    public updateCustomer() {
+    public UpdateCustomer() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
 
         try {
-            customers = customerController.getAllCustomers();
+            customers = CustomerController.getAllCustomers();
             fillCustomerComboBox();
             autoCompletion1.enable(custNameCombo);
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(updateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(UpdateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(UpdateCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -171,9 +171,9 @@ public class updateCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(updateCustomer.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(UpdateCustomer.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            updateCustomer.this.dispose();
+            UpdateCustomer.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
 
@@ -187,22 +187,22 @@ public class updateCustomer extends javax.swing.JInternalFrame {
             System.out.println(name);
             Customer customer = new Customer(custId, name, address, contact);
             int res;
-            res = customerController.updateCustomer(customer);
+            res = CustomerController.updateCustomer(customer);
             if (res > 0) {
-                JOptionPane.showMessageDialog(updateCustomer.this, "Update Successfully...");
-                customers = customerController.getAllCustomers();
+                JOptionPane.showMessageDialog(UpdateCustomer.this, "Update Successfully...");
+                customers = CustomerController.getAllCustomers();
                 nametext.setText("");
                 addresstext.setText("");
                 teltext.setText("");
                 fillCustomerComboBox();
                 custNameCombo.requestFocus();
             } else {
-                JOptionPane.showMessageDialog(updateCustomer.this, "Update Failed...");
+                JOptionPane.showMessageDialog(UpdateCustomer.this, "Update Failed...");
                 nametext.requestFocus();
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(updateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(updateCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(UpdateCustomer.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(UpdateCustomer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_addbutActionPerformed
 
@@ -233,20 +233,21 @@ public class updateCustomer extends javax.swing.JInternalFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(updateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(updateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(updateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(updateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateCustomer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new updateCustomer().setVisible(true);
+                new UpdateCustomer().setVisible(true);
             }
         });
     }

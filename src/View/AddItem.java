@@ -5,7 +5,7 @@
  */
 package View;
 
-import Controller.itemController;
+import Controller.ItemController;
 import Model.Item;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,19 +17,19 @@ import javax.swing.JOptionPane;
  *
  * @author Isuru SanDamal
  */
-public class addItem extends javax.swing.JInternalFrame {
+public class AddItem extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form addItem
      */
-    public addItem() {
+    public AddItem() {
         initComponents();
         this.getRootPane().setDefaultButton(addbut);
         try {
             itemCode.setText(generateItemCode());
         } catch (SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(addItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(AddItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(AddItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
         itemDesc.requestFocus();
@@ -169,15 +169,15 @@ public class addItem extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbutActionPerformed
-        int res = JOptionPane.showConfirmDialog(addItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(AddItem.this, "Are you sure you want to exit ?", "Select Option", JOptionPane.YES_NO_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            addItem.this.dispose();
+            AddItem.this.dispose();
         }
     }//GEN-LAST:event_cancelbutActionPerformed
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
         if (itemDesc.getText().isEmpty() || itemPrize.getText().isEmpty() || qtyOnHand.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(addItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(AddItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
             itemDesc.requestFocus();
         } else {
             try {
@@ -189,34 +189,34 @@ public class addItem extends javax.swing.JInternalFrame {
                 Item item = new Item(itemcode, description, purchasePrice, unitPrice, qoh);
 
                 if (isItemExist(item)) {
-                    JOptionPane.showMessageDialog(addItem.this, "Item already exist....");
+                    JOptionPane.showMessageDialog(AddItem.this, "Item already exist....");
                     itemDesc.requestFocus();
                 } else {
-                    int res = itemController.addItem(item);
+                    int res = ItemController.addItem(item);
                     if (res > 0) {
-                        JOptionPane.showMessageDialog(addItem.this, "Added Successfully....");
+                        JOptionPane.showMessageDialog(AddItem.this, "Added Successfully....");
                         itemCode.setText(generateItemCode());
                         itemDesc.setText("");
                         itemPrize.setText("");
                         qtyOnHand.setText("");
                         itemDesc.requestFocus();
                     } else {
-                        JOptionPane.showMessageDialog(addItem.this, "Added Fail.......", "", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(AddItem.this, "Added Fail.......", "", JOptionPane.ERROR_MESSAGE);
                         itemDesc.requestFocus();
                     }
                 }
             } catch (ClassNotFoundException | SQLException ex) {
-                JOptionPane.showMessageDialog(addItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                Logger.getLogger(addItem.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(AddItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(AddItem.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(addItem.this, "Please insert correct value for Price & Qty...", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(AddItem.this, "Please insert correct value for Price & Qty...", "Error", JOptionPane.ERROR_MESSAGE);
                 itemPrize.requestFocus();
             }
         }
     }//GEN-LAST:event_addbutActionPerformed
 
     private boolean isItemExist(Item item) throws ClassNotFoundException, SQLException {
-        ArrayList<Item> allItems = itemController.getAllItems();
+        ArrayList<Item> allItems = ItemController.getAllItems();
         for (Item oneItem : allItems) {
             if (oneItem.getDescription().equalsIgnoreCase(item.getDescription())) {
                 return true;
@@ -227,7 +227,7 @@ public class addItem extends javax.swing.JInternalFrame {
 
     private String generateItemCode() throws SQLException, ClassNotFoundException {
         try {
-            String itemCode = itemController.getLastItemCode();
+            String itemCode = ItemController.getLastItemCode();
 
             if (itemCode == null) {
                 return "I0001";
