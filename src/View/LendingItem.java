@@ -6,6 +6,7 @@
 package View;
 
 import Common.CommonUtil;
+import Controller.BillDetailController;
 import Controller.CustomerController;
 import static Controller.CustomerController.getCustAddress;
 import static Controller.CustomerController.getCustID;
@@ -25,6 +26,10 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static Controller.ItemController.getItemDetailsByName;
+import Controller.SoldItemController;
+import Model.BillDetail;
+import Model.SoldItem;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -53,7 +58,7 @@ public class LendingItem extends javax.swing.JInternalFrame {
 
         date = new Date();
         dateFormat = new SimpleDateFormat("E yyyy-MM-dd");
-        dateText.setText(dateFormat.format(date));
+        billNumber.setText(getDateAsString());
 
         try {
             fillCustomerComboBox();
@@ -83,8 +88,6 @@ public class LendingItem extends javax.swing.JInternalFrame {
         autoCompletion1 = new Common.AutoCompletion();
         autoCompletion2 = new Common.AutoCompletion();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        dateText = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         addCustBut = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -112,6 +115,9 @@ public class LendingItem extends javax.swing.JInternalFrame {
         totalText = new javax.swing.JTextField();
         cancelbut = new javax.swing.JButton();
         savebut = new javax.swing.JButton();
+        billNumber = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        isIssued = new javax.swing.JCheckBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,11 +141,6 @@ public class LendingItem extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("lend Items");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Date");
-
-        dateText.setEditable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Customer Details"));
 
@@ -351,11 +352,29 @@ public class LendingItem extends javax.swing.JInternalFrame {
             }
         });
 
+        billNumber.setEditable(false);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setText("Bill No");
+
+        isIssued.setText("  Issued");
+        isIssued.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isIssuedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addGap(18, 18, 18)
+                .addComponent(billNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -363,21 +382,17 @@ public class LendingItem extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane2)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(isIssued)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(savebut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(savebut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(cancelbut, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(cancelbut, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -385,11 +400,11 @@ public class LendingItem extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(billNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -398,12 +413,14 @@ public class LendingItem extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(isIssued)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cancelbut)
                     .addComponent(savebut))
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         pack();
@@ -514,47 +531,12 @@ public class LendingItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelbutActionPerformed
 
     private void savebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savebutActionPerformed
-        int rowCount = itemTable.getRowCount();
-        if (rowCount == 0 || custNameCombo.getSelectedItem() == "Select Customer") {
-            JOptionPane.showMessageDialog(LendingItem.this, "Please Fill All Fields", "Warnning", JOptionPane.WARNING_MESSAGE);
-            qtyText.requestFocus();
-        } else {
-            String custId = custIDText.getText();
-            String Date = dateText.getText().substring(4);
-            for (int i = 0; i < rowCount; i++) {
-                String itemId = (String) itemTable.getValueAt(i, 0);
-                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
-                int disc = Integer.parseInt((String) itemTable.getValueAt(i, 4));
-                int unitPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
-                LendDetail lenddetail = new LendDetail(custId, itemId, Date, qty, disc, unitPrice);
-                try {
-                    int res = LendDetailController.addLendDetail(lenddetail);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(LendingItem.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                String dbQty;
-                try {
-                    dbQty = getQOHtoCompare(itemId);
-                    int dbQty1 = Integer.parseInt(dbQty);
-                    int res1 = ItemController.updateItemQty(dbQty1, qty, itemId);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            for (int i = rowCount - 1; i >= 0; i--) {
-                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
-            }
-            totalText.setText("");
-            JOptionPane.showMessageDialog(LendingItem.this, "Added Successfully....");
-        }
+        saveSoldItem();
     }//GEN-LAST:event_savebutActionPerformed
+
+    private void isIssuedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isIssuedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_isIssuedActionPerformed
 
     /**
      * @param args the command line arguments
@@ -620,6 +602,72 @@ public class LendingItem extends javax.swing.JInternalFrame {
         String Qty = getQtyOnHand(ic);
         return Qty;
     }
+    
+    private void saveSoldItem(){
+        int rowCount = itemTable.getRowCount();
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(LendingItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
+        }
+        if (rowCount > 0 && itemCombo.getSelectedItem() != "Select Item") {
+            String Date = dateFormat.toString().substring(4);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("E yyyy-MM-dd");
+            int issuedOrNot = isIssued.isSelected() == true ? 1 : 0;
+            String custId = custIDText.getText();
+            try {
+                int insertBillDetailRes = BillDetailController.addBillDetail(new BillDetail(billNumber.getText(), dateFormat.format(date).substring(4), custId, issuedOrNot));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (int i = 0; i < rowCount; i++) {
+                String itemCode = (String) itemTable.getValueAt(i, 0);
+                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
+                int soldPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
+                int disc = Integer.parseInt((String) itemTable.getValueAt(i, 4));
+                LendDetail lenddetail = new LendDetail(custId, itemCode, dateFormat.format(date).substring(4), qty, disc, soldPrice);
+                
+                String dbQty;
+                try {
+                    dbQty = getQOHtoCompare(itemCode);
+                    int dbQty1 = Integer.parseInt(dbQty);
+                    int res2 = LendDetailController.addLendDetail(lenddetail);
+                    int insertSoldItemRes = SoldItemController.addSoldItem(new SoldItem(billNumber.getText(), qty, itemCode, soldPrice));
+                    int res1 = ItemController.updateItemQty(dbQty1, qty, itemCode);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(LendingItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            total = 0;
+            totalText.setText("");
+            billNumber.setText(getDateAsString());
+            JOptionPane.showMessageDialog(LendingItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
+        }
+    }
+    
+    private String getDateAsString() {
+        String dateTimeAsString = "";
+        Date date = new Date();
+        System.out.println("Date : " + date.toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.YEAR));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.MONTH)+1);
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.DATE));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.HOUR_OF_DAY));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.MINUTE));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.SECOND));
+
+        return dateTimeAsString;
+    }
+    
+    private String getStringOfInteger(Integer integer) {
+        return integer / 10 < 1 ? "0" + integer.toString() : integer.toString();
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -658,12 +706,13 @@ public class LendingItem extends javax.swing.JInternalFrame {
     private javax.swing.JButton addbut;
     private Common.AutoCompletion autoCompletion1;
     private Common.AutoCompletion autoCompletion2;
+    private javax.swing.JTextField billNumber;
     private javax.swing.JButton cancelbut;
     private javax.swing.JTextField custAddressText;
     private javax.swing.JTextField custIDText;
     private javax.swing.JComboBox custNameCombo;
-    private javax.swing.JTextField dateText;
     private javax.swing.JSpinner discount;
+    private javax.swing.JCheckBox isIssued;
     private javax.swing.JTextField itemCode;
     private javax.swing.JComboBox itemCombo;
     private javax.swing.JTable itemTable;
@@ -671,7 +720,7 @@ public class LendingItem extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

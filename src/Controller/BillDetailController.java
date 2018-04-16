@@ -6,6 +6,7 @@
 package Controller;
 
 import DBConnect.DBconnect;
+import Model.BillDetail;
 import Model.SoldItem;
 import java.sql.SQLException;
 
@@ -13,10 +14,10 @@ import java.sql.SQLException;
  *
  * @author IsuruR
  */
-public class SoldItemController {
+public class BillDetailController {
     
-    public static int addSoldItem(SoldItem soldItem) throws SQLException {
-        String query = "Insert into sold_item values(null,'" + soldItem.getItemCode() + "','" + soldItem.getQuantity()+ "','" + soldItem.getBillId()+ "','" + soldItem.getSoldPrice() + "')";
+    public static int addBillDetail(BillDetail billDetail) throws SQLException {
+        String query = "Insert into bill_detail values('" + billDetail.getBillId() + "','" + billDetail.getBillDate()+ "','" + billDetail.getCustId()+ "','" + billDetail.isIsIssued() + "')";
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 }

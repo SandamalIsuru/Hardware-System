@@ -7,9 +7,11 @@ package View;
 
 import static Controller.ItemController.getItemDetailsByName;
 import Common.CommonUtil;
+import Controller.BillDetailController;
 import Controller.ItemController;
 import static Controller.ItemController.getQtyOnHand;
 import Controller.SoldItemController;
+import Model.BillDetail;
 import Model.Item;
 import Model.SoldItem;
 import java.sql.SQLException;
@@ -21,6 +23,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +50,12 @@ public class SellItem extends javax.swing.JInternalFrame {
         initComponents();
 
         commonUtil = new CommonUtil();
-        itemCode.setEditable(false);
-
+        billNumber.setText(getDateAsString());
         try {
             items = ItemController.getAllItems();
             fillItemComboBox();
             autoCompletion1.enable(itemCombo);
             itemCode.setText(fillItemCode(itemCombo));
-            qtyText.requestFocus();
         } catch (SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,6 +93,9 @@ public class SellItem extends javax.swing.JInternalFrame {
         okbut = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         totalText = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        billNumber = new javax.swing.JTextField();
+        isIssued = new javax.swing.JCheckBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -137,17 +143,16 @@ public class SellItem extends javax.swing.JInternalFrame {
 
         itemCombo.setEditable(true);
         itemCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Item" }));
+        itemCombo.setNextFocusableComponent(qtyText);
         itemCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemComboActionPerformed(evt);
             }
         });
 
-        qtyText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                qtyTextActionPerformed(evt);
-            }
-        });
+        qtyText.setNextFocusableComponent(unitPriceText);
+
+        unitPriceText.setNextFocusableComponent(discount);
 
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -157,9 +162,15 @@ public class SellItem extends javax.swing.JInternalFrame {
         });
 
         addbut.setText("Add");
+        addbut.setNextFocusableComponent(okbut);
         addbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addbutActionPerformed(evt);
+            }
+        });
+        addbut.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                addbutKeyPressed(evt);
             }
         });
 
@@ -179,10 +190,15 @@ public class SellItem extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        itemTable.setNextFocusableComponent(removebut);
         jScrollPane2.setViewportView(itemTable);
+
+        discount.setNextFocusableComponent(addbut);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Item code");
+
+        itemCode.setEditable(false);
 
         removebut.setText("Remove");
         removebut.addActionListener(new java.awt.event.ActionListener() {
@@ -197,9 +213,26 @@ public class SellItem extends javax.swing.JInternalFrame {
                 okbutActionPerformed(evt);
             }
         });
+        okbut.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                okbutKeyPressed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Total");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setText("Bill No");
+
+        billNumber.setEditable(false);
+
+        isIssued.setText("  Issued");
+        isIssued.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isIssuedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -208,51 +241,64 @@ public class SellItem extends javax.swing.JInternalFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(itemCombo, 0, 233, Short.MAX_VALUE)
-                            .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(discount, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                            .addComponent(unitPriceText))
-                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(addbut)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(removebut))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(29, 29, 29)
-                                .addComponent(itemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(itemCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(discount)
+                                    .addComponent(unitPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(27, 27, 27)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(addbut)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(removebut))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(46, 46, 46)
+                                        .addComponent(itemCode, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(376, 376, 376)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(billNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(isIssued)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(okbut)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cancel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jScrollPane2))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(billNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -272,21 +318,26 @@ public class SellItem extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addbut)
-                    .addComponent(removebut))
-                .addGap(18, 18, 18)
+                    .addComponent(removebut)
+                    .addComponent(addbut))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(totalText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancel)
-                    .addComponent(okbut))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(totalText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cancel)
+                            .addComponent(okbut))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(isIssued)
+                        .addGap(21, 21, 21))))
         );
 
         pack();
@@ -300,31 +351,7 @@ public class SellItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbutActionPerformed
-        if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(SellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
-        } else {
-            String description = (itemCombo.getSelectedItem()).toString();
-            String itemCodeStr = itemCode.getText();
-            String unitPrice = unitPriceText.getText();
-            String qty = qtyText.getText();
-            int disc = (Integer) discount.getValue();
-            double up = Double.parseDouble(unitPrice);
-            double qtty = Double.parseDouble(qty);
-            double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
-            int dbQty = itemQtyList.get(itemCodeStr);
-            if (dbQty < Integer.parseInt(qty)) {
-                JOptionPane.showMessageDialog(SellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                total += ammount;
-                Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
-                ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
-                itemQtyList.put(itemCodeStr, dbQty - Integer.parseInt(qty));
-                qtyText.setText("");
-                discount.setValue(0);
-                totalText.setText(Double.toString(total));
-            }
-        }
-        qtyText.requestFocus();
+        addDataToTable();
     }//GEN-LAST:event_addbutActionPerformed
 
     private void itemComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemComboActionPerformed
@@ -332,25 +359,21 @@ public class SellItem extends javax.swing.JInternalFrame {
             itemCode.setText("");
             unitPriceText.setText("");
             qtyText.setText("");
-            for (int i = rowCount - 1; i >= 0; i--) {
-                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
-            }
-            rowCount = 0;
+//            for (int i = rowCount - 1; i >= 0; i--) {
+//                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+//            }
+//            rowCount = 0;
         } else {
             try {
                 itemCode.setText(fillItemCode(itemCombo));
                 unitPriceText.setText(fillUnitPriceBox(itemCombo));
-                qtyText.requestFocus();
             } catch (SQLException | ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
             }
+            qtyText.setFocusable(true);
         }
     }//GEN-LAST:event_itemComboActionPerformed
-
-    private void qtyTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtyTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_qtyTextActionPerformed
 
     private void removebutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebutActionPerformed
         int selectedRowCount = itemTable.getSelectedRowCount();
@@ -372,33 +395,7 @@ public class SellItem extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_removebutActionPerformed
 
     private void okbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okbutActionPerformed
-        int rowCount = itemTable.getRowCount();
-        if (rowCount == 0) {
-            JOptionPane.showMessageDialog(SellItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
-        }
-        if (rowCount > 0 && itemCombo.getSelectedItem() != "Select Item") {
-            for (int i = 0; i < rowCount; i++) {
-                String itemCode = (String) itemTable.getValueAt(i, 0);
-                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
-                int soldPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
-                
-                String dbQty;
-                try {
-                    dbQty = getQOHtoCompare(itemCode);
-                    int dbQty1 = Integer.parseInt(dbQty);
-                    //int insertSoldItemRes = SoldItemController.addSoldItem(new SoldItem(1, qty, itemCode, soldPrice));
-                    int res = ItemController.updateItemQty(dbQty1, qty, itemCode);
-                } catch (SQLException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            for (int i = rowCount - 1; i >= 0; i--) {
-                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
-            }
-            totalText.setText("");
-            JOptionPane.showMessageDialog(SellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
-        }
+        saveSoldItem();
     }//GEN-LAST:event_okbutActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -419,6 +416,18 @@ public class SellItem extends javax.swing.JInternalFrame {
     private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
         System.out.println("Key pressed");
     }//GEN-LAST:event_formKeyTyped
+
+    private void isIssuedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isIssuedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_isIssuedActionPerformed
+
+    private void addbutKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_addbutKeyPressed
+        addDataToTable();
+    }//GEN-LAST:event_addbutKeyPressed
+
+    private void okbutKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_okbutKeyPressed
+        saveSoldItem();
+    }//GEN-LAST:event_okbutKeyPressed
 
     /**
      * @param args the command line arguments
@@ -471,9 +480,7 @@ public class SellItem extends javax.swing.JInternalFrame {
             return "";
         } else {
             String itemCodeWithDescription = (combo.getSelectedItem()).toString();
-            String description = itemCodeWithDescription.substring(itemCodeWithDescription.indexOf("-") + 2);
-            String iCode = getItemDetailsByName(description).getString("item_code");
-            return iCode;
+            return itemCodeWithDescription.substring(0, itemCodeWithDescription.indexOf("-") - 1);
         }
     }
 
@@ -489,11 +496,102 @@ public class SellItem extends javax.swing.JInternalFrame {
         return Qty;
     }
 
+    private void addDataToTable() {
+        if (itemCode.getText().isEmpty() || unitPriceText.getText().isEmpty() || qtyText.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(SellItem.this, "Please Fill All Fields...", "Warnning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String description = (itemCombo.getSelectedItem()).toString();
+            String itemCodeStr = itemCode.getText();
+            String unitPrice = unitPriceText.getText();
+            String qty = qtyText.getText();
+            int disc = (Integer) discount.getValue();
+            double up = Double.parseDouble(unitPrice);
+            double qtty = Double.parseDouble(qty);
+            double ammount = ((up * qtty) - ((up * qtty) * (disc / 100.0)));
+            int dbQty = itemQtyList.get(itemCodeStr);
+            if (dbQty < Integer.parseInt(qty)) {
+                JOptionPane.showMessageDialog(SellItem.this, "Stock Out....Remain " + dbQty + " Items", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                total += ammount;
+                Object[] rowData = {itemCodeStr, description, qty, unitPrice, Integer.toString(disc), Double.toString(ammount)};
+                ((DefaultTableModel) itemTable.getModel()).addRow(rowData);
+                itemQtyList.put(itemCodeStr, dbQty - Integer.parseInt(qty));
+                qtyText.setText("");
+                discount.setValue(0);
+                totalText.setText(Double.toString(total));
+            }
+        }
+        qtyText.requestFocus();
+    }
+
+    private void saveSoldItem(){
+        int rowCount = itemTable.getRowCount();
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(SellItem.this, "Please Add Items to the Table...", "Warnning", JOptionPane.WARNING_MESSAGE);
+        }
+        if (rowCount > 0 && itemCombo.getSelectedItem() != "Select Item") {
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("E yyyy-MM-dd");
+            int issuedOrNot = isIssued.isSelected() == true ? 1 : 0;
+            try {
+                int insertBillDetailRes = BillDetailController.addBillDetail(new BillDetail(billNumber.getText(), dateFormat.format(date).substring(4), "", issuedOrNot));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (int i = 0; i < rowCount; i++) {
+                String itemCode = (String) itemTable.getValueAt(i, 0);
+                int qty = Integer.parseInt((String) itemTable.getValueAt(i, 2));
+                int soldPrice = Integer.parseInt((String) itemTable.getValueAt(i, 3));
+
+                String dbQty;
+                try {
+                    dbQty = getQOHtoCompare(itemCode);
+                    int dbQty1 = Integer.parseInt(dbQty);
+                    int insertSoldItemRes = SoldItemController.addSoldItem(new SoldItem(billNumber.getText(), qty, itemCode, soldPrice));
+                    int res = ItemController.updateItemQty(dbQty1, qty, itemCode);
+                } catch (SQLException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(SellItem.this, ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(SellItem.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            for (int i = rowCount - 1; i >= 0; i--) {
+                ((DefaultTableModel) itemTable.getModel()).removeRow(i);
+            }
+            total = 0;
+            totalText.setText("");
+            billNumber.setText(getDateAsString());
+            JOptionPane.showMessageDialog(SellItem.this, "Bill Printed", "", JOptionPane.YES_NO_CANCEL_OPTION);
+        }
+    }
+    
+    private String getDateAsString() {
+        String dateTimeAsString = "";
+        Date date = new Date();
+        System.out.println("Date : " + date.toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.YEAR));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.MONTH)+1);
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.DATE));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.HOUR_OF_DAY));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.MINUTE));
+        dateTimeAsString = dateTimeAsString + getStringOfInteger(cal.get(Calendar.SECOND));
+
+        return dateTimeAsString;
+    }
+
+    private String getStringOfInteger(Integer integer) {
+        return integer / 10 < 1 ? "0" + integer.toString() : integer.toString();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbut;
     private Common.AutoCompletion autoCompletion1;
+    private javax.swing.JTextField billNumber;
     private javax.swing.JButton cancel;
     private javax.swing.JSpinner discount;
+    private javax.swing.JCheckBox isIssued;
     private javax.swing.JTextField itemCode;
     private javax.swing.JComboBox itemCombo;
     private javax.swing.JTable itemTable;
@@ -504,6 +602,7 @@ public class SellItem extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;

@@ -11,12 +11,12 @@ package Model;
  */
 public class SoldItem {
     
-    private int billId;
     private int quantity;
+    private String billId;
     private String itemCode;
     private double soldPrice;
     
-    public SoldItem(int billId, int quantity, String itemCode, double soldPrice) {
+    public SoldItem(String billId, int quantity, String itemCode, double soldPrice) {
 
         this.billId = billId;
         this.quantity = quantity;
@@ -40,11 +40,11 @@ public class SoldItem {
         this.quantity = quantity;
     }
     
-    public int getBillId() {
+    public String getBillId() {
         return billId;
     }
 
-    public void setBillId(int billId) {
+    public void setBillId(String billId) {
         this.billId = billId;
     }
 
