@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class BillDetailController {
     
     public static int addBillDetail(BillDetail billDetail) throws SQLException {
-        String query = "Insert into bill_detail values('" + billDetail.getBillId() + "','" + billDetail.getBillDate()+ "','" + billDetail.getCustId()+ "','" + billDetail.isIsIssued() + "')";
+        String query = "Insert into bill_detail values('" + billDetail.getBillId() + "','" + billDetail.getBillDate()+ "','" + billDetail.getCustId()+ "','" + billDetail.isIsIssued() + "','" + billDetail.getTotal()+ "','" + billDetail.getCashReceivd() + "')";
         return DBconnect.DBconnect().createStatement().executeUpdate(query);
     }
 }

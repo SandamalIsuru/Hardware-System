@@ -14,12 +14,16 @@ public class BillDetail {
     private String billDate;
     private String custId;
     private int isIssued;
+    private double total;
+    private double cashReceived;
 
-    public BillDetail(String billId, String billDate, String custId, int isIssued) {
+    public BillDetail(String billId, String billDate, String custId, int isIssued, double total, double cashReceived) {
         this.billId = billId;
         this.billDate = billDate;
         this.custId = custId;
         this.isIssued = isIssued;
+        this.total = total;
+        this.cashReceived = cashReceived;
     }
 
     public String getBillId() {
@@ -52,6 +56,22 @@ public class BillDetail {
 
     public void setIsIssued(int isIssued) {
         this.isIssued = isIssued;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getCashReceivd() {
+        return cashReceived;
+    }
+
+    public void setCashReceivd(double cashReceived) {
+        this.cashReceived = cashReceived;
     }
     
 }
